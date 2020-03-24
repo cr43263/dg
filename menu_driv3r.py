@@ -83,6 +83,8 @@ def menu_start_new_village():
         return menu_main()
     print ('Please Enter A Village Name:')
     snvn=input()
+    if snv==0:
+        snvn='Eden'
     try:
         start_and_move_to_new_village(str(snvn),int(snv))
         return menu_village(str(snvn))
@@ -856,7 +858,7 @@ def menu_choose_sort_style():
         return list_times,ts    
 
 def menu_move_group():
-    gl=list(all_pick('groups_{}'.format(cvs())).keys())
+    gl=list(safe_pick('groups_{}'.format(cvs())).keys())
     print ('**************************************************************')
     print (' ')
     print ('              Pick A Group:')
