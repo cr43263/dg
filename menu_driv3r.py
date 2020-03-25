@@ -19,11 +19,10 @@ def menu_main():
     if safe_pick('current_village') != {}:
         print ('   (2)        Select Existing Village')
     mm=str(input())
+    print(mm)
     if mm == ('1'):
-        print ('1')
         return menu_start_new_village()
     elif mm == ('2'):
-        print ('2')
         return menu_select_village()
     else:
         print (' Dead End Found, Sorry, Returning to previous menu')
@@ -83,14 +82,14 @@ def menu_start_new_village():
         return menu_main()
     print ('Please Enter A Village Name:')
     snvn=input()
-    if snv==0:
+    if int(snv)==0:
         snvn='Eden'
     try:
         start_and_move_to_new_village(str(snvn),int(snv))
         return menu_village(str(snvn))
     except:
-        print ('seems like something went wrong')
-        return menu_start_new_village()
+        print ('srong')
+        return menu_main()
         
 def menu_village(village_name):    
     change_current_village(village_name)
@@ -686,7 +685,19 @@ def menu_make_law():
     saave([thing1l,comparer1l,value1l,thing2l,comparer2l,value2l],law_name,'laws{}'.format(cvs()))
     return menu_village(cvs())
            
-        
+def print_no_list(name, menu_to_return):
+    if menu_to_return == ' ':
+        menu_to_return=menu_village(cvs())
+    print ('**************************************************************')
+    print (' ')
+    print ('                No {}, Sorry :('.format(name))
+    print (' ')
+    print ('                Press Enter to go to {}'.format(menu_to_return.__name__))
+    print (' ')
+    print ('**************************************************************')
+    pause=input()   
+    return menu_to_return()
+    
                
                
 def menu_select_from_list(alist,listname='Thing'):
@@ -701,11 +712,13 @@ def menu_select_from_list(alist,listname='Thing'):
     for counter, thing in enumerate(alist):
         nl.append(thing)
         print ('   ({})        {}'.format(str(counter).rjust(3,' '),thing))
-    iselect=int(input())
+    iselect=input()
+    if nl==[]:
+        return print_no_list(listname,' ')
     try:
-        selection=alist[iselect]
+        selection=alist[int(iselect)]
     except:
-        selection=alist[nl[iselect]]
+        selection=alist[nl[int(iselect)]]
     return selection
     
     
@@ -734,6 +747,10 @@ def menu_edit_groups():
     print ('  ======     ----------------------------------')
     gs=[]
     gs = list(safe_pick('groups_{}'.format(cvs())).keys())
+    c1=int(1)
+    c2=int(2)
+    c3=int(3)
+    c4=int(4)
     if gs == []:
         c1=0
         c2=1
@@ -859,6 +876,12 @@ def menu_choose_sort_style():
 
 def menu_move_group():
     gl=list(safe_pick('groups_{}'.format(cvs())).keys())
+    if gl==[]:
+        return print_no_list('Groups',menu_edit_groups())
+    other_villages_list=list(village_list().keys())
+    other_villages_list.remove(cvs())
+    if other_villages_list==[]:
+        return print_no_list('Other Villages',menu_edit_groups)
     print ('**************************************************************')
     print (' ')
     print ('              Pick A Group:')
@@ -878,8 +901,6 @@ def menu_move_group():
     if int(iss) == c2:
         return menu_village(cvs())
     selected_group=gl[int(iss)]
-    other_villages_list=list(village_list().keys())
-    other_villages_list.remove(cvs())
     print ('**************************************************************')
     print (' ')
     print ('              Pick A Village To Move To:')
@@ -889,10 +910,12 @@ def menu_move_group():
     print ('  ======     ----------------------------------')
     print ('   (0)         Return To Main Menu')
     print ('   (1)         Return To Village Menu')
-    for counter, group in enumerate(other_villages_list):
-        print ('  ({})      {}'.format(str(counter).rjust(3,' '),group))
-        c21=counter+1
-        c22=counter+2
+    c21=int(1)
+    c22=int(2)
+    for counter2, group2 in enumerate(other_villages_list):
+        print ('  ({})      {}'.format(str(counter2).rjust(3,' '),group2))
+        c21=counter2+1
+        c22=counter2+2
     iss2=input()
     if int(iss2) == c21:
         return menu_main()

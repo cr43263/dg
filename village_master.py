@@ -1630,9 +1630,9 @@ def create_objective(p=random.randint(2,5)):
 
 def check_objectives():
     goal_reachers=[]
-    all_objectives=all_pick('objectives{}'.format(cvs()))
-    all_tracks=all_pick('tracks')
-    all_people=all_pick('classed_beings{}'.format(cvs()))
+    all_objectives=safe_pick('objectives{}'.format(cvs()))
+    all_tracks=safe_pick('tracks')
+    all_people=safe_pick('classed_beings{}'.format(cvs()))
     winners=[]
     real_winners=[]
     past_winners=[]
@@ -1666,8 +1666,8 @@ def check_objectives():
 
 def check_one_param(ob):
     """print(ob)"""
-    all_people=all_pick('classed_beings{}'.format(cvs()))
-    all_tracks=all_pick('tracks')
+    all_people=safe_pick('classed_beings{}'.format(cvs()))
+    all_tracks=safe_pick('tracks')
     goal_reachers=[]
     param=ob
     """print(display_param(param))"""
@@ -1737,8 +1737,8 @@ def check_one_param(ob):
 
 def check_one_param_display(ob):
     """print(ob)"""
-    all_people=all_pick('classed_beings{}'.format(cvs()))
-    all_tracks=all_pick('tracks')
+    all_people=safe_pick('classed_beings{}'.format(cvs()))
+    all_tracks=safe_pick('tracks')
     goal_reachers=[]
     param=ob
     print(display_param(param))
@@ -1823,7 +1823,7 @@ def read_objective(objective):
 
 
 def read_objectives():
-    all_objectives=all_pick('objectives{}'.format(cvs()))
+    all_objectives=safe_pick('objectives{}'.format(cvs()))
     for objt,params in all_objectives.items():
         print('***')
         for param in params:
@@ -1841,7 +1841,7 @@ def save_global_objective(name,objectiv):
 
 
 def read_global_objectives():
-    all_objectives=all_pick('objectives')
+    all_objectives=safe_pick('objectives')
     for objt,params in all_objectives.items():
         print('***')
         for param in params:
@@ -1851,9 +1851,9 @@ def read_global_objectives():
 
 def check_global_objectives():
     goal_reachers=[]
-    all_objectives=all_pick('objectives')
-    all_tracks=all_pick('tracks')
-    all_people=all_pick('classed_beings{}'.format(cvs()))
+    all_objectives=safe_pick('objectives')
+    all_tracks=safe_pick('tracks')
+    all_people=safe_pick('classed_beings{}'.format(cvs()))
     winners=[]
     real_winners=[]
     past_winners=[]
@@ -1969,7 +1969,7 @@ def build_success_list(thing,value,mod=1):
             for name, stuff in cvl().items():
                 if height(stuff.code) <= value:
                     results.append([name,hair_color(stuff.code),eye_color(stuff.code),weight(stuff.code),height(stuff.code)])
-    elif thing in list(all_pick('tracks').keys()):
+    elif thing in list(safe_pick('tracks').keys()):
         track=all_pick('tracks')[thing]
 
         if mod == 1:
@@ -2071,7 +2071,7 @@ def build_superalitives(mod,sec_phenotype=[]):
             for name, stuff in cvl().items():
                 resultx.append([name,get_phenotype(stuff.code,4),get_phenotype(stuff.code,sec_phenotype)])
     elif type(mod)is list:
-        if mod[1] in list(all_pick('tracks').values()):
+        if mod[1] in list(safe_pick('tracks').values()):
             if sec_phenotype == []:
                 for name, stuff in cvl().items():
                     resultx.append([name,get_phenotype(stuff.code,5,mod[1])])
@@ -2100,7 +2100,7 @@ def display_super(mod,sec_phenotype=[],reverse='',number_of_returns=20):
 
 def key_list_track(track):
     try:
-        out=all_pick('tracks')[track]
+        out=safe_pick('tracks')[track]
     except:
         try:
             out=list(track.keys())
@@ -2131,8 +2131,8 @@ def start_and_move_to_new_village(name,mod=4):
         """Adam and Eve only"""
         add_new_village('Eden')
         change_current_village('Eden')
-        pickle_being(Being(['Adam'],generate_outtie(),['God','lol'],['God','lol'],['?Heaven?']))
-        pickle_being(Being(['Eve'],generate_innie(),['God','lol'],['God','lol'],['?Heaven?']))
+        pickle_being(Being(['Adam'],generate_outtie(),['God','lol'],['God','lol'],'?Heaven?'))
+        pickle_being(Being(['Eve'],generate_innie(),['God','lol'],['God','lol'],'?Heaven?'))
         return bios_classed()
     if mod == 1:
         """ single small family"""
@@ -2289,7 +2289,7 @@ def list_hometown(og_list):
 def list_times(og_list,track):
     lm=[]
     for name, being in og_list.items():
-        lm.append([int(run_track(all_pick('tracks')[track],being.code)),name,being])
+        lm.append([int(run_track(safe_pick('tracks')[track],being.code)),name,being])
     return sorted(lm)
 
 def sorted_from_list(sort_type,og_list,args=[]):
@@ -2316,7 +2316,7 @@ IF subject's hair_color is not blonde,
 
 
 def file_to_list(name):
-    return list(all_pick(name).keys())
+    return list(safe_pick(name).keys())
 
 def ftl(name):
     return file_to_list(name)
