@@ -2458,30 +2458,41 @@ def log_tran_group_test(selected_group,new_village,current_village=cvs()):
     print (a)
     """
     new_village_groups=safe_pick('groups_{}'.format(new_village))
-    print(new_village_groups)
     full_group={selected_group:cvg(current_village)[selected_group]}
     d=new_village_groups
-    b=new_village_groups.update({list(full_group.keys())[0]:list(full_group.values())[0]})
-    d=new_village_groups    
+    new_village_groups.update({list(full_group.keys())[0]:list(full_group.values())[0]})   
+    """
     c=pop_test(selected_group,all_pick('groups_{}'.format(current_village)))
+    """
+    c=remove_villagers_from_other_groups(selected_group,current_village)
     """
     overwrite(c,'groups_{}'.format(current_village))
     overwrite(d,'groups_{}'.format(new_village))
     """
-    return a ,d,'yyyyyyyyy',c, '?????????'
+    return a, 'xxxxxxxxxx' ,d,'yyyyyyyyy',c, '?????????'
 
 def log_tran_group(selected_group,new_village,current_village=cvs()):
     a=emmigrate_names(all_pick('groups_{}'.format(current_village))[selected_group],new_village)
     new_village_groups=safe_pick('groups_{}'.format(new_village))
     full_group={selected_group:cvg(current_village)[selected_group]}
     d=new_village_groups
-    b=new_village_groups.update({list(full_group.keys())[0]:list(full_group.values())[0]})
-    d=new_village_groups    
+    new_village_groups.update({list(full_group.keys())[0]:list(full_group.values())[0]})   
     c=pop_test(selected_group,all_pick('groups_{}'.format(current_village)))
     overwrite(c,'groups_{}'.format(current_village))
     overwrite(d,'groups_{}'.format(new_village))
-    return a ,d,c,
-    
+    return a,d,c
+
+def clean_log_tran_group(selected_group,new_village,current_village=cvs()):
+    a=emmigrate_names(all_pick('groups_{}'.format(current_village))[selected_group],new_village)
+    new_village_groups=safe_pick('groups_{}'.format(new_village))
+    full_group={selected_group:cvg(current_village)[selected_group]}
+    d=new_village_groups
+    new_village_groups.update({list(full_group.keys())[0]:list(full_group.values())[0]})   
+    c=remove_villagers_from_other_groups(selected_group,current_village)
+    overwrite(c,'groups_{}'.format(current_village))
+    overwrite(d,'groups_{}'.format(new_village))
+    return a,d,c
+
 def pop_test(popped_entry,dictionary):
     dictionary.pop(popped_entry,None)
     return dictionary
@@ -2498,9 +2509,16 @@ def fix_group(group_name,village_name=cvs()):
 
 def update_test(exs_dic, new_entry):
     exs_dic.update({list(new_entry.keys())[0]:list(new_entry.values())})
-    return exs_dic 
-def remove_villagers_from_current_village_list(cvs,selected_group):
-    return None
+    return exs_dic
+
+def remove_villagers_from_other_groups(selected_group, selected_village=cvs()):
+    other_groups=cvg(selected_village)
+    other_groups.pop(selected_group)
+    selected_villagers=cvg(selected_village)[selected_group]
+    for group in other_groups.values():
+        for name in selected_villagers:
+            group.remove(name)
+    return other_groups
 
 
 
