@@ -19,10 +19,11 @@ def menu_main():
     if safe_pick('current_village') != {}:
         print ('   (2)        Select Existing Village')
     mm=str(input())
-    print(mm)
     if mm == ('1'):
+        print ('1')
         return menu_start_new_village()
     elif mm == ('2'):
+        print ('2')
         return menu_select_village()
     else:
         print (' Dead End Found, Sorry, Returning to previous menu')
@@ -82,14 +83,14 @@ def menu_start_new_village():
         return menu_main()
     print ('Please Enter A Village Name:')
     snvn=input()
-    if int(snv)==0:
+    if snv==0:
         snvn='Eden'
     try:
         start_and_move_to_new_village(str(snvn),int(snv))
         return menu_village(str(snvn))
     except:
-        print ('srong')
-        return menu_main()
+        print ('seems like something went wrong')
+        return menu_start_new_village()
         
 def menu_village(village_name):    
     change_current_village(village_name)
@@ -210,10 +211,10 @@ def menu_make_kid():
     print ('**************************************************************')
     print ('   Enter:                    To Select a Mom:')
     print ('  ========     ----------------------------------')
-    for counter, chicks in enumerate(sort_by_gender()[1]):
-        print ('   ({})        {}'.format(str(counter).rjust(3,' '),chicks[1]))
-        c1=counter+1
-        c2=counter+2
+    for counter2, chicks in enumerate(sort_by_gender()[1]):
+        print ('   ({})        {}'.format(str(counter2).rjust(3,' '),chicks[1]))
+        c1=counter2+1
+        c2=counter2+2
     print ('   ({})         Return To Main Menu'.format(str(c1).rjust(3,' ')))
     print ('   ({})         Return To Village Menu'.format(str(c2).rjust(3,' ')))
     imommy=int(input())
@@ -317,8 +318,8 @@ def menu_list_by_stuff(list_type,original_list,args=[]):
     else:
         print ('  Rank:                   Name:                 Weight   Height    Hair    Eye   Gender   Home Town             Time')
         print (' ========   ------------------------------------------------------------------------------------------------------- ')
-        for counter, being in enumerate(wl):
-            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}   {}'.format(str(counter).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),being[2].village_born_in.ljust(20,' '),int(being[0])))
+        for counter2, being in enumerate(wl):
+            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}   {}'.format(str(counter2).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),being[2].village_born_in.ljust(20,' '),int(being[0])))
     return menu_sort_select()
 
 
@@ -401,17 +402,17 @@ def menu_list_sorted_parents(list_type,args=[]):
     if args==[]:
         print ('  Enter:                   To Select:           Weight   Height    Hair    Eye   Gender')
         print (' ========   ---------------------------------------------------------------------------------')
-        for counter, being in enumerate(ml):
-            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}'.format(str(counter).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' ')))
-            c1=counter+1
-            c2=counter+2
+        for counter2, being in enumerate(ml):
+            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}'.format(str(counter2).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' ')))
+            c1=counter2+1
+            c2=counter2+2
     else:
         print ('  Enter:                   To Select:           Weight   Height    Hair    Eye   Gender  Time')
         print (' ========   --------------------------------------------------------------------------------- ')
-        for counter, being in enumerate(ml):
-            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}'.format(str(counter).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),int(being[0])))
-            c1=counter+1
-            c2=counter+2
+        for counter2, being in enumerate(ml):
+            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}'.format(str(counter2).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),int(being[0])))
+            c1=counter2+1
+            c2=counter2+2
     print ('  ({})      Return To Main Menu'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c2).rjust(3,' ')))
     imommy=int(input())
@@ -685,19 +686,7 @@ def menu_make_law():
     saave([thing1l,comparer1l,value1l,thing2l,comparer2l,value2l],law_name,'laws{}'.format(cvs()))
     return menu_village(cvs())
            
-def print_no_list(name, menu_to_return):
-    if menu_to_return == ' ':
-        menu_to_return=menu_village(cvs())
-    print ('**************************************************************')
-    print (' ')
-    print ('                No {}, Sorry :('.format(name))
-    print (' ')
-    print ('                Press Enter to go to {}'.format(menu_to_return.__name__))
-    print (' ')
-    print ('**************************************************************')
-    pause=input()   
-    return menu_to_return()
-    
+        
                
                
 def menu_select_from_list(alist,listname='Thing'):
@@ -712,13 +701,11 @@ def menu_select_from_list(alist,listname='Thing'):
     for counter, thing in enumerate(alist):
         nl.append(thing)
         print ('   ({})        {}'.format(str(counter).rjust(3,' '),thing))
-    iselect=input()
-    if nl==[]:
-        return print_no_list(listname,' ')
+    iselect=int(input())
     try:
-        selection=alist[int(iselect)]
+        selection=alist[iselect]
     except:
-        selection=alist[nl[int(iselect)]]
+        selection=alist[nl[iselect]]
     return selection
     
     
@@ -747,10 +734,6 @@ def menu_edit_groups():
     print ('  ======     ----------------------------------')
     gs=[]
     gs = list(safe_pick('groups_{}'.format(cvs())).keys())
-    c1=int(1)
-    c2=int(2)
-    c3=int(3)
-    c4=int(4)
     if gs == []:
         c1=0
         c2=1
@@ -876,12 +859,6 @@ def menu_choose_sort_style():
 
 def menu_move_group():
     gl=list(safe_pick('groups_{}'.format(cvs())).keys())
-    if gl==[]:
-        return print_no_list('Groups',menu_edit_groups())
-    other_villages_list=list(village_list().keys())
-    other_villages_list.remove(cvs())
-    if other_villages_list==[]:
-        return print_no_list('Other Villages',menu_edit_groups)
     print ('**************************************************************')
     print (' ')
     print ('              Pick A Group:')
@@ -901,6 +878,8 @@ def menu_move_group():
     if int(iss) == c2:
         return menu_village(cvs())
     selected_group=gl[int(iss)]
+    other_villages_list=list(village_list().keys())
+    other_villages_list.remove(cvs())
     print ('**************************************************************')
     print (' ')
     print ('              Pick A Village To Move To:')
@@ -910,10 +889,8 @@ def menu_move_group():
     print ('  ======     ----------------------------------')
     print ('   (0)         Return To Main Menu')
     print ('   (1)         Return To Village Menu')
-    c21=int(1)
-    c22=int(2)
-    for counter2, group2 in enumerate(other_villages_list):
-        print ('  ({})      {}'.format(str(counter2).rjust(3,' '),group2))
+    for counter2, group in enumerate(other_villages_list):
+        print ('  ({})      {}'.format(str(counter2).rjust(3,' '),group))
         c21=counter2+1
         c22=counter2+2
     iss2=input()
@@ -922,7 +899,7 @@ def menu_move_group():
     if int(iss2) == c22:
         return menu_village(cvs())
     selected_village=other_villages_list[int(iss2)]
-    log_tran_group(selected_group,selected_village)
+    log_tran_group(selected_group,selected_village,cvs())
     return menu_village(cvs())
     
 

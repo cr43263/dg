@@ -2472,6 +2472,7 @@ def log_tran_group_test(selected_group,new_village,current_village=cvs()):
     return a, 'xxxxxxxxxx' ,d,'yyyyyyyyy',c, '?????????'
 
 def log_tran_group(selected_group,new_village,current_village=cvs()):
+    import pdb; pdb.set_trace()
     a=emmigrate_names(all_pick('groups_{}'.format(current_village))[selected_group],new_village)
     new_village_groups=safe_pick('groups_{}'.format(new_village))
     full_group={selected_group:cvg(current_village)[selected_group]}
