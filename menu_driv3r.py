@@ -29,7 +29,8 @@ def menu_main():
         print (' Dead End Found, Sorry, Returning to previous menu')
         return menu_main()
         
-
+def m():
+    return menu_main()
 
 def find_menu(menu_to_find,previous_menu):
     try:
@@ -85,12 +86,12 @@ def menu_start_new_village():
     snvn=input()
     if snv==0:
         snvn='Eden'
-    try:
-        start_and_move_to_new_village(str(snvn),int(snv))
-        return menu_village(str(snvn))
-    except:
+    """try:"""
+    start_and_move_to_new_village(str(snvn),int(snv))
+    return menu_village(str(snvn))
+    """except:
         print ('seems like something went wrong')
-        return menu_start_new_village()
+        return menu_start_new_village()"""
         
 def menu_village(village_name):    
     change_current_village(village_name)
@@ -102,43 +103,67 @@ def menu_village(village_name):
     print ('  Enter:                    To Go To:')
     print ('  ======     ----------------------------------')
     print ('   (0)         Return To Main Menu') 
-    print ('   (1)         Show All Bios')  
-    print ('   (2)         Show All Parents')  
-    print ('   (3)         Show All Children')   
-    print ('   (4)         Show All Siblings')   
-    print ('   (5)         Show All Objectives')  
-    print ('   (6)         Make Something (Menu)')  
-    print ('   (7)         Check Objectives')
-    print ('   (8)         Show Sorted List')
-    print ('   (9)         Edit Groups')
-   
+    print ('   (1)         Make Something (Menu)')
+    print ('   (2)         Show Stuff (Menu)')  
+    print ('   (3)         Check Objectives')
+    print ('   (4)         Show Sorted List')
+    print ('   (5)         Edit Groups')
     vmi=input()
     if int(vmi) == 0:
         return menu_main()
     if int(vmi) == 1:
-        bc()
-        return menu_village(village_name)
-    if int(vmi) == 2:
-        parents_classed()
-        return menu_village(village_name)
-    if int(vmi) == 3:
-        children_classed()
-        return menu_village(village_name)
-    if int(vmi) == 4:
-        display_siblings()
-        return menu_village(village_name)
-    if int(vmi) == 5:
-        read_objectives()
-        return menu_village(village_name)
-    if int(vmi) == 6:
         return menu_make_something()
-    if int(vmi) == 7:
+    if int(vmi) == 2:
+        return menu_show_stuff()
+    if int(vmi) == 3:
         print(check_objectives())
         return menu_village(cvs())
-    if int(vmi) == 8:
+    if int(vmi) == 4:
         return menu_sort_select()
-    if int(vmi) == 9:
+    if int(vmi) == 5:
         return menu_edit_groups()
+
+
+def menu_show_stuff():    
+    village_name = cvs()
+    print ('**************************************************************')
+    print (' ')
+    print ('                  Welcome to {}'.format(village_name))
+    print (' ')
+    print ('**************************************************************')
+    print ('  Enter:                    To Go To:')
+    print ('  ======     ----------------------------------')
+    print ('   (0)         Return To Main Menu')
+    print ('   (1)         Return to Village Menu') 
+    print ('   (2)         Show All Local Bios')  
+    print ('   (3)         Show All Local Parents')  
+    print ('   (4)         Show All Local Children')   
+    print ('   (5)         Show All Local Siblings')   
+    print ('   (6)         Show Local Objectives')   
+    print ('   (7)         Show Local Laws')
+    vsmi=input()
+    if int(vsmi) == 0:
+        return menu_main()
+    if int(vsmi) == 1:
+        return menu_village(village_name)
+    if int(vsmi) == 2:
+        bc()
+        return menu_show_stuff()
+    if int(vsmi) == 3:
+        parents_classed()
+        return menu_show_stuff()
+    if int(vsmi) == 4:
+        children_classed()
+        return menu_show_stuff()
+    if int(vsmi) == 5:
+        display_siblings()
+        return menu_show_stuff()
+    if int(vsmi) == 6:
+        read_objectives()
+        return menu_show_stuff()
+    if int(vsmi) == 7:
+        return menu_read_laws()
+    
     
 def menu_make_something():
     print ('**************************************************************')
@@ -153,7 +178,7 @@ def menu_make_something():
     print ('   (2)         Make A Law') 
     print ('   (3)         Make an Objective')
     print ('   (4)         Make A Track')
-    print ('   (5)         Make A Kid Plus')
+    print ('   (5)         Make A Kid ')
     mms=input()
     if int(mms) == 0:
         return menu_main()
@@ -180,54 +205,9 @@ def menu_make_something():
         add_track(nt,tn)
         return menu_list_by_stuff(list_times,cvl(),tn)
     if int(mms) == 5:
-        return menu_kid_plus()
+        return menu_make_kid()
     
-def menu_make_kid():
-    print ('**************************************************************')
-    print (' ')
-    print ('             Pick a dad from {}'.format(cvs()))
-    print (' ')
-    print ('**************************************************************')
-    print ('   Enter:                    To Select a Dad:')
-    print ('  ========     ----------------------------------')
-    for counter, dudes in enumerate(sort_by_gender()[0]):
-        print ('   ({})        {}'.format(str(counter).rjust(3,' '),dudes[1]))
-        c1=counter+1
-        c2=counter+2
-    print ('   ({})         Return To Main Menu'.format(str(c1).rjust(3,' ')))
-    print ('   ({})         Return To Village Menu'.format(str(c2).rjust(3,' ')))
-    idaddy=int(input())
-    if int(idaddy) == c1:
-        return menu_main()
-    if int(idaddy) == c2:
-        return menu_village(cvs())
-    daddy=sort_by_gender()[0][idaddy][1]
-    print (daddy)
-    print ('**************************************************************')
-    print (' ')
-    print ('             Pick a mom from {}'.format(cvs()))
-    print ('             to have a kid with {}'.format(daddy))
-    print (' ')
-    print ('**************************************************************')
-    print ('   Enter:                    To Select a Mom:')
-    print ('  ========     ----------------------------------')
-    for counter2, chicks in enumerate(sort_by_gender()[1]):
-        print ('   ({})        {}'.format(str(counter2).rjust(3,' '),chicks[1]))
-        c1=counter2+1
-        c2=counter2+2
-    print ('   ({})         Return To Main Menu'.format(str(c1).rjust(3,' ')))
-    print ('   ({})         Return To Village Menu'.format(str(c2).rjust(3,' ')))
-    imommy=int(input())
-    if int(imommy) == c1:
-        return menu_main()
-    if int(imommy) == c2:
-        return menu_village(cvs())
-    mommy=sort_by_gender()[1][imommy][1]
-    print (mommy)
-    nk=conceive_and_add(current_villagers_list()[mommy],current_villagers_list()[daddy])
-    print ('Welcome {} to the world!'.format(nk.name))
-    Bio(nk.code)
-    return menu_village(cvs())
+
 
 
 def menu_kid_plus():
@@ -320,6 +300,7 @@ def menu_list_by_stuff(list_type,original_list,args=[]):
         print (' ========   ------------------------------------------------------------------------------------------------------- ')
         for counter2, being in enumerate(wl):
             print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}   {}'.format(str(counter2).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),being[2].village_born_in.ljust(20,' '),int(being[0])))
+    pause=input()
     return menu_sort_select()
 
 
@@ -357,6 +338,272 @@ def menu_sort_select():
         return menu_list_by_stuff(list_times,cvl(),ts)
     if int(iss) == 7:
         return menu_list_by_stuff(list_hometown,cvl())
+    
+def menu_make_kid():
+    parent1=menu_reusable_sorted_being_selector([sorted_from_list(list_hometown,cvl()),' '],'Pick The First Parent')
+    if invalid_mates_list(cvl()[parent1]) != []:
+        print_banned_mates(cvl()[parent1])
+    if valid_mates_list(cvl()[parent1]) == []:
+        print ('**************************************************************')
+        print (' ')
+        print ('             The laws of {} restrict{}'.format(cvs(),parent1))
+        print ('             from finding a legal mate.')
+        print ('             Maybe they would like a new home...')
+        print (' ')
+        print ('**************************************************************')
+        pause=input()
+        return menu_make_kid()
+    parent2=menu_reusable_sorted_being_selector([sorted_from_list(list_hometown,lz(valid_mates_list(cvl()[parent1]))),' '],'Pick A Mate for{}'.format(parent1))
+    if check_gender(cvl()[parent1].code) == 'Innie':
+        nk=conceive_and_add(cvl()[parent1],cvl()[parent2])
+    else:
+        nk=conceive_and_add(cvl()[parent2],cvl()[parent1])
+    print ('Welcome {} to the world!'.format(nk.name))
+    Bio(nk.code)  
+    return menu_village(cvs())
+    """
+    print ('**************************************************************')
+    print (' ')
+    print ('             Pick a dad from {}'.format(cvs()))
+    print (' ')
+    print ('**************************************************************')
+    print ('   Enter:                    To Select a Dad:')
+    print ('  ========     ----------------------------------')
+    for counter, dudes in enumerate(sort_by_gender()[0]):
+        print ('   ({})        {}'.format(str(counter).rjust(3,' '),dudes[1]))
+        c1=counter+1
+        c2=counter+2
+    print ('   ({})         Return To Main Menu'.format(str(c1).rjust(3,' ')))
+    print ('   ({})         Return To Village Menu'.format(str(c2).rjust(3,' ')))
+    idaddy=int(input())
+    if int(idaddy) == c1:
+        return menu_main()
+    if int(idaddy) == c2:
+        return menu_village(cvs())
+    daddy=sort_by_gender()[0][idaddy][1]
+    print (daddy)
+    print ('**************************************************************')
+    print (' ')
+    print ('             Pick a mom from {}'.format(cvs()))
+    print ('             to have a kid with {}'.format(daddy))
+    print (' ')
+    print ('**************************************************************')
+    print ('   Enter:                    To Select a Mom:')
+    print ('  ========     ----------------------------------')
+    for counter2, chicks in enumerate(sort_by_gender()[1]):
+        print ('   ({})        {}'.format(str(counter2).rjust(3,' '),chicks[1]))
+        c1=counter2+1
+        c2=counter2+2
+    print ('   ({})         Return To Main Menu'.format(str(c1).rjust(3,' ')))
+    print ('   ({})         Return To Village Menu'.format(str(c2).rjust(3,' ')))
+    imommy=int(input())
+    if int(imommy) == c1:
+        return menu_main()
+    if int(imommy) == c2:
+        return menu_village(cvs())
+    mommy=sort_by_gender()[1][imommy][1]
+    print (mommy)
+    nk=conceive_and_add(current_villagers_list()[mommy],current_villagers_list()[daddy])
+    print ('Welcome {} to the world!'.format(nk.name))
+    Bio(nk.code)
+    return menu_village(cvs())
+    """
+    
+def menu_reusable_sorted_being_selector(og_list=[sorted_from_list(list_hometown,cvl()),' '],text='Pick A Villager'):
+    print ('*****************************************************************************************************')
+    print (' ')
+    print ('              {}:'.format(text))
+    print (' ')
+    print ('*****************************************************************************************************')
+    if og_list[1]==' ':
+        print ('  Enter:                   To Select:           Weight   Height    Hair    Eye   Gender   Hometown')
+        print (' ========   -------------------------------------------------------------------------------------------')
+        for counter, being in enumerate(og_list[0]):
+            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}'.format(str(counter).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),being[2].village_born_in))
+            c1=counter+1
+            c2=counter+2
+            c3=counter+3
+    else:
+        print ('  Enter:                   To Select:           Weight   Height    Hair    Eye   Gender  Time    Hometown')
+        print (' ========   ----------------------------------------------------------------------------------------------- ')
+        for counter, being in enumerate(og_list[0]):
+            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}  {}'.format(str(counter).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),str(int(being[0])).ljust(6,' '),being[2].village_born_in))
+            c1=counter+1
+            c2=counter+2
+            c3=counter+3
+    print ('  --------------------------')
+    print ('  ({})      Re-Sort Villagers'.format(str(c1).rjust(3,' ')))
+    print ('  ({})      Return To Main Menu'.format(str(c2).rjust(3,' ')))
+    print ('  ({})      Return To Village Menu'.format(str(c3).rjust(3,' ')))
+    ivill=int(input())
+    if int(ivill) == c1:
+        return menu_reusable_sorted_being_selector(menu_reusable_sort_select(recycle_sorted_list(og_list[0])),text)
+    if int(ivill) == c2:
+        return menu_main()
+    if int(ivill) == c3:
+        return menu_village(cvs())
+    selected_villager=og_list[0][ivill][1]
+    return selected_villager
+
+def print_banned_mates(being):
+    print ('**************************************************************')
+    print (' ')
+    print ('                         ***NOTE***')
+    print (' ')
+    print ('              Villagers that{} '.format(display_name(being.name)))
+    print ('              is restricted from mating with:'.format(being.name))
+    print (' ')
+    print ('  Name:                                 Due to Law:')
+    print ('  ==================================== --------------------')
+    print (' ')
+    for excluded in invalid_mates_tripleset(being):
+        print (' {} :  {}'.format(excluded[0].ljust(35,' '),excluded[1]))
+    print (' ')
+    print ('**************************************************************')
+    return None
+    
+def menu_reusable_sort_select(og_list):
+    print ('**************************************************************')
+    print (' ')
+    print ('              Pick An Sorting Type:')
+    print (' ')
+    print ('**************************************************************')
+    print ('  Enter:                    To Go To:')
+    print ('  ======     ----------------------------------')
+    print ('   (0)         Return To Main Menu')
+    print ('   (1)         Return To Village Menu')
+    print ('   (2)         Height')
+    print ('   (3)         Weight')
+    print ('   (4)         Hair Color')
+    print ('   (5)         Eye Color')
+    print ('   (6)         Track Time')
+    print ('   (7)         Home Town')
+    iss=input()
+    ts=' '
+    if int(iss) == 0:
+        return menu_main()
+    if int(iss) == 1:
+        return menu_village(cvs())
+    if int(iss) == 2:
+        return sorted_from_list(list_height,og_list),ts
+    if int(iss) == 3:
+        return sorted_from_list(list_weight,og_list),ts
+    if int(iss) == 4:
+        return sorted_from_list(list_hair_color,og_list),ts
+    if int(iss) == 5:
+        return sorted_from_list(list_eye_color,og_list),ts
+    if int(iss) == 6:
+        ts=menu_select_from_list(list(all_pick('tracks').keys()),'Track')
+        return sorted_from_list(list_times,og_list,ts),ts
+    if int(iss) == 7:
+        return sorted_from_list(list_hometown,og_list),ts
+    """
+Input format of menu_reusable_sort_select(og_list):
+og_list = {Beings} aka {Name:<object>}
+
+Output format of menu_reusable_sort_select(og_list):
+[0] = list of list of villagers stats
+[0][n] = 3 part entry for each villager
+[0][n][0] = pertinent value as a string (exp:'Blonde','250')
+[0][n][1] = villager name
+[0][n][2] = being object instance thing... you know <village_master.Being at 0xYadayad> ... all that
+[1] = ' ' or ' track_name '
+
+"""
+
+def menu_super_reusable_sort_select(sorted_menu_set,previous_menu):
+    beings_list=recycle_sorted_list(sorted_menu_set)
+    print ('**************************************************************')
+    print (' ')
+    print ('              Pick An Sorting Type:')
+    print (' ')
+    print ('**************************************************************')
+    print ('  Enter:                    To Go To:')
+    print ('  ======     ----------------------------------')
+    print ('   (0)         Return To Main Menu')
+    print ('   (1)         Return To Village Menu')
+    print ('   (2)         Height')
+    print ('   (3)         Weight')
+    print ('   (4)         Hair Color')
+    print ('   (5)         Eye Color')
+    print ('   (6)         Track Time')
+    print ('   (7)         Home Town')
+    iss=input()
+    ts=' '
+    if int(iss) == 0:
+        return menu_main()
+    if int(iss) == 1:
+        return menu_village(cvs())
+    if int(iss) == 2:
+        return sorted_from_list(list_height,og_list),ts
+    if int(iss) == 3:
+        return sorted_from_list(list_weight,og_list),ts
+    if int(iss) == 4:
+        return sorted_from_list(list_hair_color,og_list),ts
+    if int(iss) == 5:
+        return sorted_from_list(list_eye_color,og_list),ts
+    if int(iss) == 6:
+        ts=menu_select_from_list(list(all_pick('tracks').keys()),'Track')
+        return sorted_from_list(list_times,og_list,ts),ts
+    if int(iss) == 7:
+        return sorted_from_list(list_hometown,og_list),ts
+    """
+Input format of menu_reusable_sort_select(og_list):
+og_list = {Beings} aka {Name:<object>}
+
+Output format of menu_reusable_sort_select(og_list):
+[0] = list of list of villagers stats
+[0][n] = 3 part entry for each villager
+[0][n][0] = pertinent value as a string (exp:'Blonde','250')
+[0][n][1] = villager name
+[0][n][2] = being object instance thing... you know <village_master.Being at 0xYadayad> ... all that
+[1] = ' ' or ' track_name '
+
+"""
+    
+def menu_legal_mate_with_being(being_name):
+    legal_mates = list_of_dicts_to_flat_dict(n2bd(valid_mates_list(cvl()[being_name]))[0])
+    mates_beings = menu_reusable_sort_select(legal_mates)
+    mates=[]
+    print(mates_beings)
+    """
+    for stuff in mates_beings:
+        mates.append(stuff[0][1])
+        """
+    print ('*****************************************************************************************************')
+    print (' ')
+    print ('              Pick A Mate for{}:'.format(being_name))
+    print (' ')
+    print ('*****************************************************************************************************')
+    if mates_beings[1]==' ':
+        print ('  Enter:                   To Select:           Weight   Height    Hair    Eye   Gender')
+        print (' ========   ---------------------------------------------------------------------------------')
+        for counter2, being in enumerate(mates_beings[0]):
+            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}'.format(str(counter2).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' ')))
+            c1=counter2+1
+            c2=counter2+2
+    else:
+        print ('  Enter:                   To Select:           Weight   Height    Hair    Eye   Gender  Time')
+        print (' ========   --------------------------------------------------------------------------------- ')
+        for counter2, being in enumerate(mates_beings[0]):
+            print ('  ({})     {} {}lbs {}ft {}in  {}  {} {}  {}'.format(str(counter2).rjust(3,' '),being[1].ljust(35,' '),str(weight(being[2].code)).rjust(3,' '),str(height(being[2].code)[0]).rjust(2,' '),str(height(being[2].code)[1]).rjust(2,' '),hair_color(being[2].code).ljust(6,' '),eye_color(being[2].code).ljust(6,' '),check_gender(being[2].code).ljust(6,' '),int(being[0])))
+            c1=counter2+1
+            c2=counter2+2
+    print ('  ({})      Return To Main Menu'.format(str(c1).rjust(3,' ')))
+    print ('  ({})      Return To Village Menu'.format(str(c2).rjust(3,' ')))
+    imate=int(input())
+    if int(imate) == c1:
+        return menu_main()
+    if int(imate) == c2:
+        return menu_village(cvs())
+    mate=mates_beings[0][imate][2]
+    if check_gender(cvl()[being_name].code) == 'Innie':
+        nk=conceive_and_add(cvl()[being_name],mate)
+    else:
+        nk=conceive_and_add(mate,cvl()[being_name])
+    print ('Welcome {} to the world!'.format(nk.name))
+    Bio(nk.code)
+    return menu_village(cvs())
     
     
 def menu_list_sorted_parents(list_type,args=[]):
@@ -651,8 +898,8 @@ def menu_make_law():
             clist=hcs
         else:
             clist=ecs
-        for counter, color in enumerate(clist):
-            print ('   ({})        {}'.format(str(counter).rjust(3,' '),color))
+        for counter2, color in enumerate(clist):
+            print ('   ({})        {}'.format(str(counter2).rjust(3,' '),color))
         ilaw_v2=int(input())        
         value2=clist[ilaw_v2]
     elif int(ilaw_t2) == 4:
@@ -667,7 +914,7 @@ def menu_make_law():
         print (' ')
         print ('**************************************************************')
         ilaw_v2=int(input())
-        value1=ilaw_v2
+        value2=ilaw_v2
     else:
         print ('              Enter {{value2}}:')
         print (' ')
@@ -747,7 +994,8 @@ def menu_edit_groups():
     print ('  ({})      Create New Group'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Main Menu'.format(str(c2).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c3).rjust(3,' ')))
-    print ('  ({})      Move Group to a Different Village'.format(str(c4).rjust(3,' ')))
+    if gs != [] :
+        print ('  ({})      Move Group to a Different Village'.format(str(c4).rjust(3,' ')))
     igs=int(input())
     if int(igs) == c1:
         print ('Enter a name for this Group:')
@@ -840,6 +1088,7 @@ def menu_choose_sort_style():
     print ('   (4)         Hair Color')
     print ('   (5)         Eye Color')
     print ('   (6)         Track Time')
+    print ('   (7)         Home Town')
     iss=input()
     if int(iss) == 0:
         return menu_main()
@@ -855,7 +1104,9 @@ def menu_choose_sort_style():
         return list_eye_color
     if int(iss) == 6:
         ts=menu_select_from_list(list(all_pick('tracks').keys()),'Track')
-        return list_times,ts    
+        return list_times,ts
+    if int(iss) == 5:
+        return list_home_town    
 
 def menu_move_group():
     gl=list(safe_pick('groups_{}'.format(cvs())).keys())
@@ -887,12 +1138,12 @@ def menu_move_group():
     print ('**************************************************************')
     print ('  Enter:                    To Go To:')
     print ('  ======     ----------------------------------')
-    print ('   (0)         Return To Main Menu')
-    print ('   (1)         Return To Village Menu')
     for counter2, group in enumerate(other_villages_list):
         print ('  ({})      {}'.format(str(counter2).rjust(3,' '),group))
         c21=counter2+1
         c22=counter2+2
+    print ('  ({})      Return To Main Menu'.format(str(c21).rjust(3,' ')))
+    print ('  ({})      Return To Village Menu'.format(str(c22).rjust(3,' ')))
     iss2=input()
     if int(iss2) == c21:
         return menu_main()
@@ -930,8 +1181,43 @@ def menu_show_family_tree(being):
     for hsib in loop_list_siblings([display_name(being.name)])[1]:
         print (hsib)
     
+    """
+    print ('**************************************************************')
+    print ('IF subjects {} {} {}'.format(thing1,comparer1,value1))
+    print ('their mates {}'.format(thing2), '{{cant/must}} be {{comparer2}} {{value2}}')
+    print ('EXAMPLE')
+    print ('IF subjects hair_color {{is not}} {{blonde}},')
+    print ('their mates weight must be less than 250 ')
+    print (' ')
+    print ('              Pick {{cant/must}}:')
+    print (' ')
+    print ('**************************************************************')
+    print ('  Enter:                    To Select:')
+    print ('  ======     ----------------------------------')
+    print ('  (  1)        cant')
+    print ('  (  2)        must')
+    icm=int(input())
+    if int(icm) == 1:
+        xcm = 'cant'
+    if int(icm) == 2:
+        xcm = 'must'
+    """    
+def menu_deepdive_laws():
+    dumcounter=int(0)
+    ddl=deepdive_laws()
+    laws=safe_pick('laws{}'.format(cvs()))
+    for law,parm_list in laws.items():
+        print (law)
+        dumcounter2=int(0)
+        for being in cvl():
+            print('{} {} {}'.format(ddl[dumcounter2][0].ljust(35,' '),ddl[dumcounter2][1][dumcounter][0],ddl[dumcounter2][1][dumcounter][1]))
+            dumcounter2 += 1
+        dumcounter += 1
+        print ('Press enter to view next law')
+        paws=input()
+    return dumcounter
     
-           
+        
     
 """
 def sorted_from_list(sort_type,og_list,args=[]):
@@ -997,3 +1283,36 @@ def menu_sort_select():
         ts=menu_select_from_list(list(all_pick('tracks').keys()),'Track')
         return menu_list_by_stuff(list_times,cvl(),ts)
 """
+
+
+def menu_header(text_list,option=0):
+    print (120*'*')
+    print (' ')
+    if option == 0 :
+        for entry in text_list:
+            print (entry.center(120,' '))
+    else :
+        for entry in text_list:
+            print (option*10*' ',entry)
+    print (' ')
+    print (120*'*')
+    return None
+
+
+def menu_read_laws():
+    if safe_pick('laws{}'.format(cvs())) == {}:
+        print (menu_header(['There are no laws in this town.']))
+    for law,plist in safe_pick('laws{}'.format(cvs())).items():
+        thing1 = plist[0][0]
+        comparer1 = plist[1][0]
+        value1 = plist[2][0]
+        thing2 = plist[3][0]
+        comparer2 = plist[4][0]
+        value2 = plist[5][0]
+        print ('*** {} ***'.format(law))        
+        print ('IF subjects {} {} {}'.format(thing1,comparer1,value1))
+        print ('their mates {} must {} {}'.format(thing2,comparer2,value2))
+        print(' ')
+    pause=input()
+    return menu_show_stuff()
+    

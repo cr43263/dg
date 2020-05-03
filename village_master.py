@@ -4,6 +4,9 @@ import operator
 import math
 import re
 from operator import itemgetter
+
+import pdb
+
 """
 _______________________________________
 
@@ -698,41 +701,50 @@ def create_named_being(gender=''):
         return[generate_name(2),generate_outtie()]
 
 
-def create_classed_being():
+def create_classed_being(vbi=' '):
+    if vbi == ' ':
+        vbi=cvs()
     mom=create_named_being(1)
     dad=create_named_being(2)
     name=childs_name(mom[0],dad[0])
     code=generate_child(mom[1],dad[1])
-    village_born_in=cvs()
+    village_born_in=vbi
     instance=variable_name(name)
     instance= Being(name,code,mom,dad,village_born_in)
     return instance
 
 
-def create_classed_innie():
+def create_classed_innie(vbi='Somewhere Else...'):
     mom=create_named_being(1)
     dad=create_named_being(2)
     name=childs_name(mom[0],dad[0],1)
     code=generate_child(mom[1],dad[1],1)
-    village_born_in='Somewhere Else...'
+    village_born_in=vbi
     instance=variable_name(name)
     instance= Being(name,code,mom,dad,village_born_in)
     return instance
 
 
-def create_classed_outtie():
+def create_classed_outtie(vbi='Somewhere Else...'):
     mom=create_named_being(1)
     dad=create_named_being(2)
     name=childs_name(mom[0],dad[0],2)
     code=generate_child(mom[1],dad[1],2)
-    village_born_in='Somewhere Else...'
+    village_born_in=vbi
     instance=variable_name(name)
     instance= Being(name,code,mom,dad,village_born_in)
     return instance
 
 
-def create_and_save_being():
-    return pickle_being(create_classed_being())
+def create_and_save_being(gender=' ',vbi=' '):
+    if vbi == ' ':
+        vbi=cvs()
+    if gender == ' ':
+        return pickle_being(create_classed_being(vbi))
+    if gender == 'innie':
+        return pickle_being(create_classed_innie(vbi))
+    if gender == 'outtie':
+        return pickle_being(create_classed_outtie(vbi))
 
 
 def conceive(mom,dad):
@@ -1384,6 +1396,7 @@ def all_pick(file):
                 break        
     return obj
 
+
 def safe_pick(file):
     obj ={}
     try:
@@ -1445,12 +1458,13 @@ def mutate(being):
     cycle_type=being[1][1][0]
     cycles=being[1][0][0]
     """
-    cycle_type=random.randint(1,8)
-    cycles=1
+    cycle_type=1
+    cycles=being[1][0][0]
     if cycle_type==1:
         for mutations in range(cycles):
             spot_change_mutation(being)
             return being
+        """
     if cycle_type==2:
         for mutations in range(cycles):
             spot_delete_mutation(being)
@@ -1467,6 +1481,7 @@ def mutate(being):
             return being
     if cycle_type>4:
         return being
+        """
 
 
 def spot_change_mutation(being):
@@ -2120,7 +2135,7 @@ sorter_type key ===
 some track   === 5
 """
     return sorted(results_list,key=itemgetter(sorter_type))
-list_vtl=['Eden','Small Family','Large Family','10 Adults, 2 Babies']
+list_vtl=['Eden','Small Family','Large Family','Small Tribe','Medium Tribe','Large Tribe','10-20 families']
 
 def start_and_move_to_new_village(name,mod=4):
     if name in list(village_list().keys()):
@@ -2158,20 +2173,98 @@ def start_and_move_to_new_village(name,mod=4):
         """small 10 people +2 random babies"""
         add_new_village(name)
         change_current_village(name)
-        create_group(8)
-        pickle_being(create_classed_innie())
-        pickle_being(create_classed_outtie())
+        for girls in range(5):
+            create_and_save_being(gender='innie',vbi='Somewhere Else...')
+        for boys in range(5):
+            create_and_save_being(gender='outtie',vbi='Somewhere Else...')
         random_babies(2)
         return bios_classed()
     if mod == 4:
         """normal 10-20 people +2-5 random families"""
+        add_new_village(name)
+        change_current_village(name)
+        for family in range(random.randint(2,5)):
+            mom=create_classed_innie()
+            dad=create_classed_outtie()
+            pickle_being(Being(mom.name,mom.code,mom.mom,mom.dad,'Somewhere Else...'))
+            pickle_being(Being(dad.name,dad.code,dad.mom,dad.dad,'Somewhere Else...'))
+            pickle_family(mom,dad,random.randint(1,5))
+        for girls in range(random.randint(5,10)):
+            create_and_save_being(gender='innie',vbi='Somewhere Else...')
+        for boys in range(random.randint(5,10)):
+            create_and_save_being(gender='outtie',vbi='Somewhere Else...')
     if mod == 5:
         """large 80-100 people +3-8 families"""
+        add_new_village(name)
+        change_current_village(name)
+        for family in range(random.randint(3,8)):
+            mom=create_classed_innie()
+            dad=create_classed_outtie()
+            pickle_being(Being(mom.name,mom.code,mom.mom,mom.dad,'Somewhere Else...'))
+            pickle_being(Being(dad.name,dad.code,dad.mom,dad.dad,'Somewhere Else...'))
+            pickle_family(mom,dad,random.randint(1,5))
+        for girls in range(random.randint(15,25)):
+            create_and_save_being(gender='innie',vbi='Somewhere Else...')
+        for boys in range(random.randint(15,25)):
+            create_and_save_being(gender='outtie',vbi='Somewhere Else...')
+        return bios_classed()
     if mod == 6:
         """ 10-20 families """
+        add_new_village(name)
+        change_current_village(name)
+        for family in range(random.randint(10,20)):
+            mom=create_classed_innie()
+            dad=create_classed_outtie()
+            pickle_being(Being(mom.name,mom.code,mom.mom,mom.dad,'Somewhere Else...'))
+            pickle_being(Being(dad.name,dad.code,dad.mom,dad.dad,'Somewhere Else...'))
+            pickle_family(mom,dad,random.randint(1,5))
+        return bios_classed()
     if mod == 7:
         """ ~ 500 people from various sources"""
+        
+"""
+create_and_save_being(gender=' ',vbi=' ')
+    def pickle_being(being):
+    return saave(being,display_name(being.name),'classed_beings{}'.format(cvs()))
 
+    def overwrite(obj,file):
+    stuff=obj
+    db={}
+    dbfile=open(file,'wb')
+    pickle.dump(db,dbfile)
+    dbfile.close()
+    for name, instance in stuff.items():
+        saave(instance,name,file)
+    return file,obj,'4'
+
+    def saave(obj,name,file):
+    db={}
+    db[name]=obj
+    dbfile = open(file,'ab')
+    pickle.dump(db,dbfile)
+    dbfile.close()
+    return obj
+"""    
+"""
+def set_current_village(name):
+    try:
+        cvl=all_pick('village_list')
+        if name in list(cvl.keys()):
+            dbfile=open('current_village','wb')
+            db={}
+            db[name]=name
+            pickle.dump(db,dbfile)
+            dbfile.close()
+        else:
+            print('Add {} to village list first'.format(name))
+    except:
+        dbfile=open('current_village','wb')
+        db={}
+        db[name]=name
+        pickle.dump(db,dbfile)
+        dbfile.close()
+    return current_village()
+"""
 
 def current_village():
     cv=all_pick('current_village')
@@ -2246,6 +2339,16 @@ def current_villagers_list():
 def cvl():
     return current_villagers_list()
 
+def recycle_sorted_list(sorted_menu_set):
+    beings_dict={}
+    if sorted_menu_set[1][1] != ' ':
+        sorted_menu_set=[sorted_menu_set,' ']
+    print(sorted_menu_set[1])
+    for entry in sorted_menu_set[0]:
+        ed1={entry[1] : entry[2]}
+        beings_dict.update(ed1)
+    return beings_dict
+    
 
 def list_weight(og_list):
     lw=[]
@@ -2299,13 +2402,18 @@ def sorted_from_list(sort_type,og_list,args=[]):
         rl=sort_type(og_list,args)
     return rl
 
+def list_of_dicts_to_flat_dict(list_of_dicts):
+    one_dict={}
+    for dict_entry in list_of_dicts:
+        one_dict.update(dict_entry)
+    return one_dict
 
 def save_law(law_name,thing1,comparer1,value1,thing2,cantmust,comparer2,value2):
     """
 8 total args
 
 IF subject's {{thing1}} is {{comparer1}} {{value1}},
-    their mate's {{thing2}} {{can't/must}} be {{comparer2}} {{value2}}
+    their mate's {{thing2}} must be {{comparer2}} {{value2}}
 
 EXAMPLE
 
@@ -2314,6 +2422,205 @@ IF subject's hair_color is not blonde,
     """
     return saave([thing1,comparer1,value1,thing2,cantmust,comparer2,value2],law_name,'laws{}'.format(cvs()))
 
+def invalid_mates_list(being):
+    law_counter=int(0)
+    invalid_mates=[]
+    laws=safe_pick('laws{}'.format(cvs()))
+    if laws == {}:
+        return invalid_mates
+    for law, parameter_list in laws.items():
+        pert_value=''
+        if parameter_list[0][1] == 1:
+            pert_value=hair_color(being.code)
+            comparer_value = parameter_list[2][0]
+        elif parameter_list[0][1] == 2:
+            pert_value=eye_color(being.code)
+            comparer_value = parameter_list[2][0]
+        elif parameter_list[0][1] == 3:
+            pert_value=weight(being.code)
+            comparer_value = parameter_list[2][1]
+        elif parameter_list[0][1] == 4:
+            pert_value=inch_height(being.code)
+            comparer_value = parameter_list[2][1]
+        elif parameter_list[0][1] == 5:
+            track_name=parameter_list[0][0][13:]
+            pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+            comparer_value = parameter_list[2][0]
+            """
+"""
+        if parameter_list[1][1] == 1:
+            if comparer_value == pert_value:
+                invalid_mates.extend(find_illegal_mates(parameter_list,being))
+        elif parameter_list[1][1] == 2:
+            if comparer_value != pert_value:
+                invalid_mates.extend(find_illegal_mates(parameter_list,being))
+        elif parameter_list[1][1] == 3:
+            if comparer_value > pert_value:
+                invalid_mates.extend(find_illegal_mates(parameter_list,being))
+        elif parameter_list[1][1] == 4:
+            if comparer_value >= pert_value:
+                invalid_mates.extend(find_illegal_mates(parameter_list,being))
+        elif parameter_list[1][1] == 5:
+            if comparer_value < pert_value:
+                invalid_mates.extend(find_illegal_mates(parameter_list,being))
+        elif parameter_list[1][1] == 6:
+            if comparer_value <= pert_value:
+                invalid_mates.extend(find_illegal_mates(parameter_list,being))
+        law_counter += 1            
+    return remove_duplicates(invalid_mates)
+
+def invalid_mates_tripleset(being):
+    """pdb.set_trace()"""
+    law_counter=int(1)
+    invalid_mates=[]
+    laws=safe_pick('laws{}'.format(cvs()))
+    if laws == {}:
+        return invalid_mates
+    for law, parameter_list in laws.items():
+        pert_value=''
+        if parameter_list[0][1] == 1:
+            pert_value=hair_color(being.code)
+            comparer_value = parameter_list[2][0]
+        if parameter_list[0][1] == 2:
+            pert_value=eye_color(being.code)
+            comparer_value = parameter_list[2][0]
+        if parameter_list[0][1] == 3:
+            pert_value=weight(being.code)
+            comparer_value = parameter_list[2][1]
+        if parameter_list[0][1] == 4:
+            pert_value=inch_height(being.code)
+            comparer_value = parameter_list[2][1]
+        if parameter_list[0][1] == 5:
+            track_name=parameter_list[0][0][13:]
+            pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+            comparer_value = parameter_list[2][0]
+            """
+"""
+        if parameter_list[1][1] == 1:
+            if comparer_value == pert_value:
+                for restr in find_illegal_mates(parameter_list,being):
+                    invalid_mates.append([restr,law,law_counter])
+        if parameter_list[1][1] == 2:
+            if comparer_value != pert_value:
+                for restr in find_illegal_mates(parameter_list,being):
+                    invalid_mates.append([restr,law,law_counter])
+        if parameter_list[1][1] == 3:
+            if comparer_value > pert_value:
+                for restr in find_illegal_mates(parameter_list,being):
+                    invalid_mates.append([restr,law,law_counter])
+        if parameter_list[1][1] == 4:
+            if comparer_value >= pert_value:
+                for restr in find_illegal_mates(parameter_list,being):
+                    invalid_mates.append([restr,law,law_counter])
+        if parameter_list[1][1] == 5:
+            if comparer_value < pert_value:
+                for restr in find_illegal_mates(parameter_list,being):
+                    invalid_mates.append([restr,law,law_counter])
+        if parameter_list[1][1] == 6:
+            if comparer_value <= pert_value:
+                for restr in find_illegal_mates(parameter_list,being):
+                    invalid_mates.append([restr,law,law_counter])
+        law_counter += 1            
+    return invalid_mates
+            
+def find_illegal_mates(parameter_list,being):
+    """pdb.set_trace()"""
+    invalid_mates2= []
+    biological_mates=create_full_list_of_opposite_gender(being.code)
+    for mate in biological_mates:
+        pert_value=''
+        if parameter_list[3][1] == 1:
+            pert_value2=hcs.index(hair_color(mate.code))
+            comparer_value = parameter_list[5][0]
+        if parameter_list[3][1] == 2:
+            pert_value2=ecs.index(eye_color(mate.code))
+            comparer_value = parameter_list[5][0]
+        if parameter_list[3][1] == 3:
+            pert_value2=weight(mate.code)
+            comparer_value = parameter_list[5][1]
+        if parameter_list[3][1] == 4:
+            pert_value2=inch_height(mate.code)
+            comparer_value = parameter_list[5][1]
+        if parameter_list[3][1] == 5:
+            track_name=parameter_list[3][0][13:]
+            pert_value2=run_track(safe_pick('tracks')[track_name],mate.code)
+            comparer_value = parameter_list[5][0]
+        """
+"""
+        if parameter_list[4][1] == 1:
+            if comparer_value != pert_value2:
+                invalid_mates2.append(display_name(mate.name))
+        if parameter_list[4][1] == 2:
+            if comparer_value == pert_value2:
+                invalid_mates2.append(display_name(mate.name))
+        if parameter_list[4][1] == 3:
+            if comparer_value <= pert_value2:
+                invalid_mates2.append(display_name(mate.name))
+        if parameter_list[4][1] == 4:
+            if comparer_value < pert_value2:
+                invalid_mates2.append(display_name(mate.name))
+        if parameter_list[4][1] == 5:
+            if comparer_value >= pert_value2:
+                invalid_mates2.append(display_name(mate.name))
+        if parameter_list[4][1] == 6:
+            if comparer_value > pert_value2:
+                invalid_mates2.append(display_name(mate.name))
+    return invalid_mates2
+
+def create_full_list_of_opposite_gender(being):
+    potential_mates=[]
+    if check_gender(being) == 'Innie':
+        for name, beings in cvl().items():
+            if check_gender(beings.code) == 'Outtie':
+                potential_mates.append(beings)
+    if check_gender(being) == 'Outtie':
+        for name, beings in cvl().items():
+            if check_gender(beings.code) == 'Innie':
+                potential_mates.append(beings)
+    return potential_mates
+
+def create_full_list_of_opposite_gender_names(being):
+    potential_mates=[]
+    if check_gender(being) == 'Innie':
+        for name, beings in cvl().items():
+            if check_gender(beings.code) == 'Outtie':
+                potential_mates.append(name)
+    if check_gender(being) == 'Outtie':
+        for name, beings in cvl().items():
+            if check_gender(beings.code) == 'Innie':
+                potential_mates.append(name)
+    return potential_mates
+
+def valid_mates_list(being):
+    potentials=create_full_list_of_opposite_gender_names(being.code)
+    excluded=invalid_mates_list(being)
+    """print(excluded,potentials)"""
+    for name in excluded:
+        """print(name)"""
+        potentials.remove(name)
+    return potentials
+
+            
+def list_of_names_to_list_of_being_dicts(list_of_names):
+    beings_dicts=[]
+    not_found_list=[]
+    for name in list_of_names:
+        if name in list(cvl().keys()):
+            dict_for_being={}
+            dict_for_being.update({name:cvl()[name]})
+            beings_dicts.append(dict_for_being)
+        else:
+            not_found_list.append(name)
+    return[beings_dicts,not_found_list]
+        
+def n2bd(list_of_names):
+    return list_of_names_to_list_of_being_dicts(list_of_names)
+    
+def name_list_to_cvl_style(list_of_names):
+    return list_of_dicts_to_flat_dict(n2bd(list_of_names)[0])
+
+def lz(ugh):
+    return name_list_to_cvl_style(ugh)
 
 def file_to_list(name):
     return list(safe_pick(name).keys())
@@ -2472,7 +2779,6 @@ def log_tran_group_test(selected_group,new_village,current_village=cvs()):
     return a, 'xxxxxxxxxx' ,d,'yyyyyyyyy',c, '?????????'
 
 def log_tran_group(selected_group,new_village,current_village=cvs()):
-    import pdb; pdb.set_trace()
     a=emmigrate_names(all_pick('groups_{}'.format(current_village))[selected_group],new_village)
     new_village_groups=safe_pick('groups_{}'.format(new_village))
     full_group={selected_group:cvg(current_village)[selected_group]}
@@ -2531,50 +2837,11 @@ def add_villagers_to_new_village(cvs,selected_village,selected_group):
 def add_group_to_new_village(cvs,selected_village,selected_group):
     return None
 
+def cvs():
+    cvs=''.join(list(current_village().keys()))
+    return cvs
 
 
-"""
-    def pickle_being(being):
-    return saave(being,display_name(being.name),'classed_beings{}'.format(cvs()))
-
-    def overwrite(obj,file):
-    stuff=obj
-    db={}
-    dbfile=open(file,'wb')
-    pickle.dump(db,dbfile)
-    dbfile.close()
-    for name, instance in stuff.items():
-        saave(instance,name,file)
-    return file,obj,'4'
-
-    def saave(obj,name,file):
-    db={}
-    db[name]=obj
-    dbfile = open(file,'ab')
-    pickle.dump(db,dbfile)
-    dbfile.close()
-    return obj
-"""    
-"""
-def set_current_village(name):
-    try:
-        cvl=all_pick('village_list')
-        if name in list(cvl.keys()):
-            dbfile=open('current_village','wb')
-            db={}
-            db[name]=name
-            pickle.dump(db,dbfile)
-            dbfile.close()
-        else:
-            print('Add {} to village list first'.format(name))
-    except:
-        dbfile=open('current_village','wb')
-        db={}
-        db[name]=name
-        pickle.dump(db,dbfile)
-        dbfile.close()
-    return current_village()
-"""
 
 def four_for_you(being):
     you=being.code
@@ -2604,3 +2871,441 @@ def poppp():
     print (dftest)
     c=dftest[0][0].append(str(6))
     return print(c)
+
+
+def sbl():
+    pdb.set_trace()
+    laws=safe_pick('laws{}'.format(cvs()))
+    effected=[]
+    if laws == {}:
+        return effected
+    a=int(0)
+    b=int(1)
+    c=int(2)
+    print(a,b,c)
+    law_counter=int(1)
+    villagers=cvl()
+    for law, parameter_list in laws.items():
+        for name, being in villagers.items():
+            pert_value=''
+            if parameter_list[a][1] == 1:
+                pert_value=hair_color(being.code)
+                comparer_value = parameter_list[c][0]
+            elif parameter_list[a][1] == 2:
+                pert_value=eye_color(being.code)
+                comparer_value = parameter_list[c][0]
+            elif parameter_list[a][1] == 3:
+                pert_value=weight(being.code)
+                comparer_value = parameter_list[c][1]
+            elif parameter_list[a][1] == 4:
+                pert_value=inch_height(being.code)
+                comparer_value = parameter_list[c][1]
+            elif parameter_list[a][1] == 5:
+                track_name=parameter_list[a][0][13:]
+                pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+                comparer_value = parameter_list[c][0]
+                """
+    """
+            if parameter_list[b][1] == 1:
+                if comparer_value == pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 2:
+                if comparer_value != pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 3:
+                if comparer_value > pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 4:
+                if comparer_value >= pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 5:
+                if comparer_value < pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 6:
+                if comparer_value <= pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+        law_counter += 1            
+    return effected
+
+
+def tbl():
+    pdb.set_trace()
+    laws=safe_pick('laws{}'.format(cvs()))
+    effected=[]
+    if laws == {}:
+        return effected
+    a=int(3)
+    b=int(4)
+    c=int(5)
+    print(a,b,c)
+    law_counter=int(1)
+    villagers=cvl()
+    for law, parameter_list in laws.items():
+        for name, being in villagers.items():
+            pert_value=''
+            if parameter_list[a][1] == 1:
+                pert_value=hair_color(being.code)
+                comparer_value = parameter_list[c][0]
+            elif parameter_list[a][1] == 2:
+                pert_value=eye_color(being.code)
+                comparer_value = parameter_list[c][0]
+            elif parameter_list[a][1] == 3:
+                pert_value=weight(being.code)
+                comparer_value = parameter_list[c][1]
+            elif parameter_list[a][1] == 4:
+                pert_value=inch_height(being.code)
+                comparer_value = parameter_list[c][1]
+            elif parameter_list[a][1] == 5:
+                track_name=parameter_list[a][0][13:]
+                pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+                comparer_value = parameter_list[c][0]
+                """
+    """
+            if parameter_list[b][1] == 1:
+                if comparer_value != pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 2:
+                if comparer_value == pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 3:
+                if comparer_value <= pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 4:
+                if comparer_value < pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 5:
+                if comparer_value >= pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+            elif parameter_list[b][1] == 6:
+                if comparer_value > pert_value:
+                    effected.append([name,law,law_counter,check_gender(being.code)])
+        law_counter += 1            
+    return effected
+
+
+def effected_names_list(ebl_instance):
+    listonames=[]
+    for entry in ebl_instance:
+        listonames.append(entry[0])
+    return listonames
+    
+"""
+            
+def people_effected_by_laws():
+    villagers=cvl()
+    laws=safe_pick('laws{}'.format(cvs()))
+    effected=[]
+    for name, being in villagers.items():
+        for law, parameter_list in laws.items():
+            pert_value=' '
+            if parameter_list[0][1] == 1:
+                pert_value=hair_color(being.code)
+            elif parameter_list[0][1] == 2:
+                pert_value=eye_color(being.code)
+            elif parameter_list[0][1] == 3:
+                pert_value=weight(being.code)
+            elif parameter_list[0][1] == 4:
+                pert_value=inch_height(being.code)
+            elif parameter_list[0][1] == 5:
+                track_name=parameter_list[0][0][13:]
+                pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+            print(pert_value)
+            """
+"""
+            if parameter_list[1][1] == 1:
+                if parameter_list[2][1] != pert_value:
+                    effected.append([name,law])
+            elif parameter_list[1][1] == 2:
+                if parameter_list[2][1] == pert_value:
+                    effected.append([name,law])
+            elif parameter_list[1][1] == 3:
+                if parameter_list[2][1] > pert_value:
+                    effected.append([name,law])
+            elif parameter_list[1][1] == 4:
+                if parameter_list[2][1] >= pert_value:
+                    effected.append([name,law])
+            elif parameter_list[1][1] == 5:
+                if parameter_list[2][1] < pert_value:
+                    effected.append([name,law])
+            elif parameter_list[1][1] == 6:
+                if parameter_list[2][1] <= pert_value:
+                    effected.append([name,law])
+    return effected
+            
+def people_effected_by_laws_subject():
+    villagers=cvl()
+    laws=safe_pick('laws{}'.format(cvs()))
+    effected=[]
+    for name, being in villagers.items():
+        for law, parameter_list in laws.items():
+            pert_value=' '
+            if parameter_list[0][1] == 1:
+                pert_value=hair_color(being.code)
+            if parameter_list[0][1] == 2:
+                pert_value=eye_color(being.code)
+            if parameter_list[0][1] == 3:
+                pert_value=weight(being.code)
+            if parameter_list[0][1] == 4:
+                pert_value=inch_height(being.code)
+            if parameter_list[0][1] == 5:
+                track_name=parameter_list[0][0][13:]
+                pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+            print(pert_value)
+            """
+"""
+            if parameter_list[1][1] == 1:
+                if parameter_list[2][1] != pert_value:
+                    effected.append([name,law])
+            if parameter_list[1][1] == 2:
+                if parameter_list[2][1] == pert_value:
+                    effected.append([name,law])
+            if parameter_list[1][1] == 3:
+                if parameter_list[2][1] > pert_value:
+                    effected.append([name,law])
+            if parameter_list[1][1] == 4:
+                if parameter_list[2][1] >= pert_value:
+                    effected.append([name,law])
+            if parameter_list[1][1] == 5:
+                if parameter_list[2][1] < pert_value:
+                    effected.append([name,law])
+            if parameter_list[1][1] == 6:
+                if parameter_list[2][1] <= pert_value:
+                    effected.append([name,law])
+    return effected
+
+def people_effected_by_laws_target():
+    villagers=cvl()
+    laws=safe_pick('laws{}'.format(cvs()))
+    effected=[]
+    for law, parameter_list in laws.items():
+        for name, being in villagers.items():
+            pert_value=' '
+            if parameter_list[3][1] == 1:
+                pert_value=hair_color(being.code)
+            if parameter_list[3][1] == 2:
+                pert_value=eye_color(being.code)
+            if parameter_list[3][1] == 3:
+                pert_value=weight(being.code)
+            if parameter_list[3][1] == 4:
+                pert_value=inch_height(being.code)
+            if parameter_list[3][1] == 5:
+                track_name=parameter_list[0][0][13:]
+                pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+            print(pert_value)
+            """
+"""
+            if parameter_list[4][1] == 1:
+                if parameter_list[5][1] != pert_value:
+                    effected.append([name,law])
+            if parameter_list[4][1] == 2:
+                if parameter_list[5][1] == pert_value:
+                    effected.append([name,law])
+            if parameter_list[4][1] == 3:
+                if parameter_list[5][1] > pert_value:
+                    effected.append([name,law])
+            if parameter_list[4][1] == 4:
+                if parameter_list[5][1] >= pert_value:
+                    effected.append([name,law])
+            if parameter_list[4][1] == 5:
+                if parameter_list[5][1] < pert_value:
+                    effected.append([name,law])
+            if parameter_list[4][1] == 6:
+                if parameter_list[5][1] <= pert_value:
+                    effected.append([name,law])
+    return effected
+
+def effected_dict_law(s_or_t='s'):
+    op={}
+    if s_or_t == 't':
+        efectd_list = people_effected_by_laws_target()
+    else:
+        efectd_list = people_effected_by_laws_subject()
+    for entry in efectd_list:
+        law=entry[1]
+        name=entry[0]
+        if law in op:
+            op[law].append(name)
+        else:
+            op[law]= [name]
+    return op
+
+def deepdive_laws():
+    ddlo=[]
+    laws=safe_pick('laws{}'.format(cvs()))
+    for name,being in cvl().items():
+        ddl=[]
+        for law, parm_list in laws.items():
+            ddl.append([subjected(being,parm_list),targeted(being,parm_list),law])
+        ddlo.append([name,ddl])
+    return ddlo
+        
+        
+def subjected(being,parameter_list):
+    switch=0            
+    pert_value=' '
+    if parameter_list[0][1] == 1:
+        pert_value=hair_color(being.code)
+    if parameter_list[0][1] == 2:
+        pert_value=eye_color(being.code)
+    if parameter_list[0][1] == 3:
+        pert_value=weight(being.code)
+    if parameter_list[0][1] == 4:
+        pert_value=inch_height(being.code)
+    if parameter_list[0][1] == 5:
+        track_name=parameter_list[0][0][13:]
+        pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+        """"""
+    if parameter_list[1][1] == 1:
+        if parameter_list[2][1] != pert_value:
+            switch=1
+    if parameter_list[1][1] == 2:
+        if parameter_list[2][1] == pert_value:
+            switch=1
+    if parameter_list[1][1] == 3:
+        if parameter_list[2][1] > pert_value:
+            switch=1
+    if parameter_list[1][1] == 4:
+        if parameter_list[2][1] >= pert_value:
+            switch=1
+    if parameter_list[1][1] == 5:
+        if parameter_list[2][1] < pert_value:
+            switch=1
+    if parameter_list[1][1] == 6:
+        if parameter_list[2][1] <= pert_value:
+            switch=1 
+    return switch
+
+def targeted(being,parameter_list):
+    switch=0            
+    pert_value=' '
+    if parameter_list[3][1] == 1:
+        pert_value=hair_color(being.code)
+    if parameter_list[3][1] == 2:
+        pert_value=eye_color(being.code)
+    if parameter_list[3][1] == 3:
+        pert_value=weight(being.code)
+    if parameter_list[3][1] == 4:
+        pert_value=inch_height(being.code)
+    if parameter_list[3][1] == 5:
+        track_name=parameter_list[0][0][13:]
+        pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+        """"""
+    if parameter_list[4][1] == 1:
+        if parameter_list[5][1] != pert_value:
+            switch=1
+    if parameter_list[4][1] == 2:
+        if parameter_list[5][1] == pert_value:
+            switch=1
+    if parameter_list[4][1] == 3:
+        if parameter_list[5][1] > pert_value:
+            switch=1
+    if parameter_list[4][1] == 4:
+        if parameter_list[5][1] >= pert_value:
+            switch=1
+    if parameter_list[4][1] == 5:
+        if parameter_list[5][1] < pert_value:
+            switch=1
+    if parameter_list[4][1] == 6:
+        if parameter_list[5][1] <= pert_value:
+            switch=1 
+    return switch
+
+def ddlaws_subject():
+    villagers=cvl()
+    laws=safe_pick('laws{}'.format(cvs()))
+    effected=[]
+    for name, being in villagers.items():
+        for law, parameter_list in laws.items():
+            switch=0            
+            pert_value=' '
+            if parameter_list[0][1] == 1:
+                pert_value=hair_color(being.code)
+            if parameter_list[0][1] == 2:
+                pert_value=eye_color(being.code)
+            if parameter_list[0][1] == 3:
+                pert_value=weight(being.code)
+            if parameter_list[0][1] == 4:
+                pert_value=inch_height(being.code)
+            if parameter_list[0][1] == 5:
+                track_name=parameter_list[0][0][13:]
+                pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+            print(pert_value)
+            """
+"""
+            if parameter_list[1][1] == 1:
+                if parameter_list[2][1] != pert_value:
+                    switch=1
+            if parameter_list[1][1] == 2:
+                if parameter_list[2][1] == pert_value:
+                    switch=1
+            if parameter_list[1][1] == 3:
+                if parameter_list[2][1] > pert_value:
+                    switch=1
+            if parameter_list[1][1] == 4:
+                if parameter_list[2][1] >= pert_value:
+                    switch=1
+            if parameter_list[1][1] == 5:
+                if parameter_list[2][1] < pert_value:
+                    switch=1
+            if parameter_list[1][1] == 6:
+                if parameter_list[2][1] <= pert_value:
+                    switch=1
+            if law in effected:
+                effected[law].append([name,switch])
+            else:
+                effected[law] = [name,switch]  
+    return effected
+
+def ddlaws_target():
+    villagers=cvl()
+    laws=safe_pick('laws{}'.format(cvs()))
+    effected={}
+    for law, parameter_list in laws.items():
+        print ([law,'x', parameter_list])
+        for name, being in villagers.items():
+            switch=0
+            pert_value=' '
+            if parameter_list[3][1] == 1:
+                pert_value=hair_color(being.code)
+            if parameter_list[3][1] == 2:
+                pert_value=eye_color(being.code)
+            if parameter_list[3][1] == 3:
+                pert_value=weight(being.code)
+            if parameter_list[3][1] == 4:
+                pert_value=inch_height(being.code)
+            if parameter_list[3][1] == 5:
+                track_name=parameter_list[0][0][13:]
+                pert_value=run_track(safe_pick('tracks')[track_name],being.code)
+            print(switch,pert_value, name, parameter_list[4][1] ,parameter_list[5][1] )
+            """
+"""
+            if parameter_list[4][1] == 1:
+                if parameter_list[5][1] != pert_value:
+                    switch=1
+                    print('a',switch)
+            if parameter_list[4][1] == 2:
+                if parameter_list[5][1] == pert_value:
+                    switch=1
+                    print('b',switch)
+            if parameter_list[4][1] == 3:
+                if parameter_list[5][1] > pert_value:
+                    switch=1
+                    print('c',switch)
+            if parameter_list[4][1] == 4:
+                if parameter_list[5][1] >= pert_value:
+                    switch=1
+                    print('d',switch)
+            if parameter_list[4][1] == 5:
+                if parameter_list[5][1] < pert_value:
+                    switch=1
+            if parameter_list[4][1] == 6:
+                if parameter_list[5][1] <= pert_value:
+                    switch=1
+                    print('e',switch)
+            if law in effected:
+                effected[law].append([name,switch])
+            else:
+                effected[law] = [name,switch]
+            
+    return effected    
+"""
