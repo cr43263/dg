@@ -2,23 +2,17 @@
 
 First "Install" Instructions:
 
-1) Make sure current_village, village_list, and tracks are BLANK, but not deleted, and **ADD THESE FILES TO .gitignore!!!!**
-  - Open with NotePad
-  - select all (Ctrl+a)
-  - delete selection(all)
-  - save
+1) Open the Blanks folder and place a copy of them at the same level as the Blanks folder (not inside it). Add them to the .git ignore list
   
-  **OR**
-  
-  - replace with similiarly named files stored in "blanks" folder
-  
-/
-/
 
-2) Make sure village_master.py, menu_driv3r.py, menu_tester.py and the three files above are all on the same level in the same folder
 
-/
-/
+
+
+2) Make sure village_master.py, menu_driv3r.py, menu_tester.py and the three files above are all on the same level in the same folder. 
+   - Make sure they are in a folder of their own. The program will create a number of files and will clutter up any folder it runs from
+
+
+
 
 3) Right click on menu_tester.py
   - create shortcut
