@@ -2,7 +2,7 @@
 
 First "Install" Instructions:
 
-1) Open the Blanks folder and place a copy of them at the same level as the Blanks folder (not inside it). Add them to the .git ignore list
+1) Open the Blanks folder and place a copy of the three files at the same level as the Blanks folder (not inside it). Add them to the .git ignore list
   
 
 
