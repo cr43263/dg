@@ -18,12 +18,10 @@ def menu_main():
     print ('   (1)        Start New Village')
     if safe_pick('current_village') != {}:
         print ('   (2)        Select Existing Village')
-    mm=str(input())
-    if mm == ('1'):
-        print ('1')
+    mm=safe_input([1,2])
+    if mm == 1:
         return menu_start_new_village()
-    elif mm == ('2'):
-        print ('2')
+    elif mm == 2:
         return menu_select_village()
     else:
         print (' Dead End Found, Sorry, Returning to previous menu')
@@ -31,6 +29,31 @@ def menu_main():
         
 def m():
     return menu_main()
+
+def safe_input(range_of_valid_inputs=' '):
+    "range_of_valid_inputs format: 1)A two item list [start,stop] 2)A multi item list with all valid options 3) a single item list for an exact match"
+    sis=-1
+    try:
+        sibase=input()
+        si=int(sibase)
+    except:
+        if sibase == 'exit':
+            raise Exception
+        print ('Please Enter a Valid Selection')
+        return safe_input(range_of_valid_inputs)
+    if len(range_of_valid_inputs) == 1:
+        if si != range_of_valid_inputs:
+            print ('Incorrect Entry. Try Again?')
+            return safe_input(range_of_valid_inputs)
+    elif len(range_of_valid_inputs) == 2:
+        if not range_of_valid_inputs[0] <= si <= range_of_valid_inputs[1]:
+            print ('Please Enter a Valid Selection')            
+            return safe_input(range_of_valid_inputs)
+    else:
+        if si not in range_of_valid_inputs:
+            print ('Please Enter a Valid Selection')            
+            return safe_input(range_of_valid_inputs)
+    return si
 
 def find_menu(menu_to_find,previous_menu):
     try:
@@ -56,7 +79,7 @@ def menu_select_village():
         print ('   ({})        {}'.format(counter,village))
     rttmm=counter+1
     print ('   ({})        Return To Main Menu'.format(rttmm))    
-    msv=int(input())
+    msv=safe_input([0,rttmm])
     if msv == rttmm:
         return menu_main()
     try:
@@ -79,7 +102,7 @@ def menu_start_new_village():
         print ('   ({})        {}'.format(counter,types))
     rttmm=counter+1
     print ('   ({})        Return To Main Menu'.format(rttmm)) 
-    snv=input()
+    snv=safe_input([0,rttmm])
     if int(snv) == int(rttmm):
         return menu_main()
     print ('Please Enter A Village Name:')
@@ -108,7 +131,7 @@ def menu_village(village_name):
     print ('   (3)         Check Objectives')
     print ('   (4)         Show Sorted List')
     print ('   (5)         Edit Groups')
-    vmi=input()
+    vmi=safe_input([0,5])
     if int(vmi) == 0:
         return menu_main()
     if int(vmi) == 1:
@@ -141,7 +164,7 @@ def menu_show_stuff():
     print ('   (5)         Show All Local Siblings')   
     print ('   (6)         Show Local Objectives')   
     print ('   (7)         Show Local Laws')
-    vsmi=input()
+    vsmi=safe_input([0,7])
     if int(vsmi) == 0:
         return menu_main()
     if int(vsmi) == 1:
@@ -179,7 +202,7 @@ def menu_make_something():
     print ('   (3)         Make an Objective')
     print ('   (4)         Make A Track')
     print ('   (5)         Make A Kid ')
-    mms=input()
+    mms=safe_input([0,5])
     if int(mms) == 0:
         return menu_main()
     if int(mms) == 1:
@@ -225,7 +248,7 @@ def menu_kid_plus():
     print ('   (4)         Hair Color')
     print ('   (5)         Eye Color')
     print ('   (6)         Track Time')   
-    mkp=input()
+    mkp=safe_input([0,6])
     if int(mkp) == 0:
         return menu_main()
     if int(mkp) == 1:
@@ -255,7 +278,7 @@ def menu_make_objective():
     print ('   (1)         Custom')
     print ('   (2)         Fully Random')
     print ('   (3)         Partial Random')
-    mmo=input()
+    mmo=safe_input([0,3])
     if int(mmo) == 0:
         return menu_main()
     """
@@ -320,7 +343,7 @@ def menu_sort_select():
     print ('   (5)         Eye Color')
     print ('   (6)         Track Time')
     print ('   (7)         Home Town')
-    iss=input()
+    iss=safe_input([0,7])
     if int(iss) == 0:
         return menu_main()
     if int(iss) == 1:
@@ -415,8 +438,8 @@ def menu_reusable_sorted_being_selector(og_list=[sorted_from_list(list_order,cvl
         test=og_list[1]
     except:
         test=' '
-        """
-    print(og_list)
+        
+    print(og_list)"""
     print ('*****************************************************************************************************')
     print (' ')
     print ('              {}:'.format(text))
@@ -443,7 +466,7 @@ def menu_reusable_sorted_being_selector(og_list=[sorted_from_list(list_order,cvl
     print ('  ({})      Re-Sort Villagers'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Main Menu'.format(str(c2).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c3).rjust(3,' ')))
-    ivill=int(input())
+    ivill=safe_input([0,c3])
     if int(ivill) == c1:
         return menu_reusable_sorted_being_selector(menu_reusable_sort_select(roseta(og_list,3,givetv)),text,givetv)
     if int(ivill) == c2:
@@ -486,7 +509,7 @@ def menu_reusable_sort_select(og_list):
     print ('   (5)         Eye Color')
     print ('   (6)         Track Time')
     print ('   (7)         Home Town')
-    iss=input()
+    iss=safe_input([0,7])
     ts=' '
     if int(iss) == 0:
         return menu_main()
@@ -536,7 +559,7 @@ def menu_super_reusable_sort_select(sorted_menu_set,previous_menu):
     print ('   (5)         Eye Color')
     print ('   (6)         Track Time')
     print ('   (7)         Home Town')
-    iss=input()
+    iss=safe_input([0,7])
     ts=' '
     if int(iss) == 0:
         return menu_main()
@@ -599,7 +622,7 @@ def menu_legal_mate_with_being(being_name):
             c2=counter2+2
     print ('  ({})      Return To Main Menu'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c2).rjust(3,' ')))
-    imate=int(input())
+    imate=safe_input([0,c2])
     if int(imate) == c1:
         return menu_main()
     if int(imate) == c2:
@@ -642,7 +665,7 @@ def menu_list_sorted_parents(list_type,args=[]):
             c2=counter+2
     print ('  ({})      Return To Main Menu'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c2).rjust(3,' ')))
-    idaddy=int(input())
+    idaddy=safe_input([0,c2])
     if int(idaddy) == c1:
         return menu_main()
     if int(idaddy) == c2:
@@ -670,7 +693,7 @@ def menu_list_sorted_parents(list_type,args=[]):
             c2=counter2+2
     print ('  ({})      Return To Main Menu'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c2).rjust(3,' ')))
-    imommy=int(input())
+    imommy=safe_input([0,c2])
     if int(imommy) == c1:
         return menu_main()
     if int(imommy) == c2:
@@ -701,8 +724,7 @@ def menu_make_law():
     print ('  (  5)        Track Time')
     print ('  ({})        Return To Main Menu'.format(str(6).rjust(3,' ')))
     print ('  ({})        Return To Village Menu'.format(str(7).rjust(3,' ')))
-    ilaw_t1=int(input())
-    
+    ilaw_t1=safe_input([0,7])
     if int(ilaw_t1) == 6:
         return menu_main()
     if int(ilaw_t1) == 7:
@@ -734,6 +756,7 @@ def menu_make_law():
     if int(ilaw_t1) == 1 or int(ilaw_t1) == 2:
         print ('  (  1)        is')
         print ('  (  2)        is not')
+        ilaw_c1=safe_input([1,2])
     else:
         print ('  (  1)        is')
         print ('  (  2)        is not')
@@ -741,7 +764,7 @@ def menu_make_law():
         print ('  (  4)        is less than or equal to')
         print ('  (  5)        is greater than')
         print ('  (  6)        is greater than or equal to')
-    ilaw_c1=int(input())
+        ilaw_c1=safe_input([1,6])
     if int(ilaw_c1) == 1:
         comparer1 = 'is'
     if int(ilaw_c1) == 2:
@@ -956,7 +979,7 @@ def menu_select_from_list(alist,listname='Thing'):
     for counter, thing in enumerate(alist):
         nl.append(thing)
         print ('   ({})        {}'.format(str(counter).rjust(3,' '),thing))
-    iselect=int(input())
+    iselect=safe_input([0,counter])
     try:
         selection=alist[iselect]
     except:
@@ -976,7 +999,7 @@ def select_track():
     tl = list(all_pick('tracks').keys())
     for counter, track in enumerate(tl):
         print ('   ({})        {}'.format(str(counter).rjust(3,' '),track))
-    ilaw_tl=int(input())
+    ilaw_tl=safe_input([0,counter])
     return tl[ilaw_tl]
     
 def menu_edit_groups():
@@ -993,6 +1016,7 @@ def menu_edit_groups():
         c1=0
         c2=1
         c3=2
+        c4=2
     for counter, group in enumerate(gs):
         print ('  ({})      {}'.format(str(counter).rjust(3,' '),group))
         c1=counter+1
@@ -1004,7 +1028,7 @@ def menu_edit_groups():
     print ('  ({})      Return To Village Menu'.format(str(c3).rjust(3,' ')))
     if gs != [] :
         print ('  ({})      Move Group to a Different Village'.format(str(c4).rjust(3,' ')))
-    igs=int(input())
+    igs=safe_input([0,c4])
     if int(igs) == c1:
         print ('Enter a name for this Group:')
         group_name=str(input())
@@ -1013,7 +1037,7 @@ def menu_edit_groups():
         try:
             return menu_edit_one_group(srt_styl[0],selected_group,group_name,srt_styl[1])
         except:
-            return menu_edit_one_group(srt_styl,selected_group,group_name)
+            return menu_edit_one_group(list_order,selected_group,group_name)
     if int(igs) == c2:
         return menu_main()
     if int(igs) == c3:
@@ -1022,19 +1046,14 @@ def menu_edit_groups():
         return menu_move_group()
     selected_group=[]
     selected_group=safe_pick('groups_{}'.format(cvs()))[gs[igs]]
-    srt_styl=menu_choose_sort_style()
-    print(srt_styl)
-    try:
-        return menu_edit_one_group(srt_styl[0],selected_group,gs[igs],srt_styl[1])
-    except:
-        return menu_edit_one_group(srt_styl,selected_group,gs[igs])
-    
+    return menu_edit_one_group(list_order,selected_group,gs[igs])
+  
     
         
 def menu_create_group():
     print ('Enter a name for this Group:')
     group_name=str(input())
-    return None
+    return group_name
 
 def menu_edit_one_group(list_type,selected_group,group_name,args=[]):
     a= list_type.__name__
@@ -1071,7 +1090,7 @@ def menu_edit_one_group(list_type,selected_group,group_name,args=[]):
     print ('  ({})      Return To Main Menu'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c2).rjust(3,' ')))
     print ('  ({})      Return To Edit Groups Menu'.format(str(c3).rjust(3,' ')))
-    bs=int(input())
+    bs=safe_input([0,c3])
     if int(bs) == c1:
         return menu_main()
     if int(bs) == c2:
@@ -1097,24 +1116,24 @@ def menu_choose_sort_style():
     print ('   (5)         Eye Color')
     print ('   (6)         Track Time')
     print ('   (7)         Home Town')
-    iss=input()
+    iss=safe_input([0,7])
     if int(iss) == 0:
         return menu_main()
     if int(iss) == 1:
         return menu_village(cvs())
     if int(iss) == 2:
-        return list_height
+        return (list_height)
     if int(iss) == 3:
-        return list_weight
+        return (list_weight)
     if int(iss) == 4:
-        return list_hair_color
+        return (list_hair_color)
     if int(iss) == 5:
-        return list_eye_color
+        return (list_eye_color)
     if int(iss) == 6:
         ts=menu_select_from_list(list(all_pick('tracks').keys()),'Track')
-        return list_times,ts
-    if int(iss) == 5:
-        return list_hometown    
+        return (list_times,ts)
+    if int(iss) == 7:
+        return (list_hometown)    
 
 def menu_move_group():
     gl=list(safe_pick('groups_{}'.format(cvs())).keys())
@@ -1131,7 +1150,7 @@ def menu_move_group():
         c2=counter+2
     print ('  ({})      Return To Main Menu'.format(str(c1).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c2).rjust(3,' ')))
-    iss=input()
+    iss=safe_input([0,c2])
     if int(iss) == c1:
         return menu_main()
     if int(iss) == c2:
@@ -1152,7 +1171,7 @@ def menu_move_group():
         c22=counter2+2
     print ('  ({})      Return To Main Menu'.format(str(c21).rjust(3,' ')))
     print ('  ({})      Return To Village Menu'.format(str(c22).rjust(3,' ')))
-    iss2=input()
+    iss2=safe_input([0,c22])
     if int(iss2) == c21:
         return menu_main()
     if int(iss2) == c22:

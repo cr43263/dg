@@ -2653,10 +2653,12 @@ def emmigrate_beings_test(list_of_beings,new_village):
    
 def emmigrate_names(list_of_names,new_village):
     cvll=cvl()
+    cvl_names=list(cvl().keys())
     ncvl=all_pick('classed_beings{}'.format(new_village))
     list_of_beings=[]
     for name in list_of_names:
-        list_of_beings.append(cvl()[name])
+        if name in cvl_names:
+            list_of_beings.append(cvl()[name])
     for being in list_of_beings:
         cvll.pop(display_name(being.name),'Not in list?')
         ncvl.update({display_name(being.name):being})
