@@ -5,6 +5,8 @@ import math
 import re
 from operator import itemgetter
 
+
+
 import pdb
 
 
@@ -2416,7 +2418,7 @@ def cvs():
 
 
 def current_villagers_list():
-    cvl=all_pick('classed_beings{}'.format(cvs()))
+    cvl=safe_pick('classed_beings{}'.format(cvs()))
     return cvl
 
 
