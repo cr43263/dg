@@ -9,13 +9,20 @@ from operator import itemgetter
 
 import pdb
 
+import datetime
+"""print(datetime.datetime.now().time())"""
+
+
+
+
+
 
 def roseta(list_to_interpert,type_to_output,village_name=' '):
     if village_name == ' ':
         village_name=cvs()
         village_beings=safe_pick('classed_beings{}'.format(village_name))
     elif village_name == 'x':
-        village_beings=cvl_ALL()
+        village_beings=CVA
     else:
         village_beings=safe_pick('classed_beings{}'.format(village_name))       
     
@@ -84,8 +91,11 @@ def cvl_ALL():
     for vill in villages:
         cvll=safe_pick('classed_beings{}'.format(vill))
         for name,being in cvll.items():
-            alll.update({name:being})
+            alll.update({name:[being,vill]})
     return alll
+
+
+
 """
 
 flat list of names        == [name1,name2,name3]
@@ -323,18 +333,18 @@ def compound_name():
 
 def innie_name():
     typ=random.randint(1, 100)
-    if 0 < typ <= 9:
+    if 0 < typ <= 20:
         return compound_name()
-    if 9 < typ <= 29:
+    if 20 < typ <= 29:
         end=len(Boringf)-1
         ind=random.randint(0, end)
         lis=random.randint(0,2)
         nam=random.randint(0,9)
         chuk = randon[lis][nam]
         return Boringf[ind]+chuk
-    if 29 < typ <= 79:
+    if 29 < typ <= 92:
         return custom()
-    if 79 < typ <= 97:
+    if 92 < typ <= 97:
         end=len(Boringf)-1
         ind=random.randint(0, end)
         return Boringf[ind]
@@ -344,18 +354,18 @@ def innie_name():
 
 def outtie_name():
     typ=random.randint(1, 100)
-    if 0 < typ <= 9:
+    if 0 < typ <= 20:
         return compound_name()
-    if 9 < typ <= 29:
+    if 20 < typ <= 29:
         end=len(Boringm)-1
         ind=random.randint(0, end)
         lis=random.randint(0,2)
         nam=random.randint(0,9)
         chuk = randon[lis][nam]
         return Boringm[ind]+chuk
-    if 29 < typ <= 79:
+    if 29 < typ <= 92:
         return custom()
-    if 79 < typ <= 97:
+    if 92 < typ <= 97:
         end=len(Boringm)-1
         ind=random.randint(0, end)
         return Boringm[ind]
@@ -1651,6 +1661,38 @@ def find_siblings(being):
     siblings_dict[display_name(being.name)]=siblings
     return siblings_dict
 
+def find_siblings_ALL(nameloc):
+    ca=CVA
+    siblings_dict={}
+    being=ca[nameloc[0][0]][0]
+    """print (ca[nameloc[0][0]])"""
+    mom1=display_name(ca[nameloc[0][0]][0].mom[0])
+    dad1=display_name(ca[nameloc[0][0]][0].dad[0])
+    people=ca
+    half_sibling=[]
+    full_sibling=[]
+    for namex, stuffx in people.items():
+        name2=namex
+        mom2=display_name(stuffx[0].mom[0])
+        dad2=display_name(stuffx[0].dad[0])
+        if mom1 == mom2:
+            if name2 == display_name(being.name):
+                continue
+            if dad1 == dad2:
+                full_sibling.append(namex)
+            else:
+                if name2 == being.name:
+                    continue
+                half_sibling.append([namex,'Same Mom'])
+        elif dad1 == dad2:
+            if name2 == display_name(being.name):
+                continue
+            half_sibling.append([namex,'Same Dad'])
+        else:
+            continue
+    siblings=(half_sibling,full_sibling,mom1,dad1)
+    siblings_dict[display_name(being.name)]=siblings
+    return siblings_dict
 
 def display_siblings():
     s=dict_siblings()
@@ -2225,7 +2267,7 @@ list_vtl=['Eden','Small Family','Large Family','Small Tribe','Medium Tribe','Lar
 
 def start_and_move_to_new_village(name,mod=4):
     if name in list(village_list().keys()):
-        raise 'Sorry, a village with that name already exsists'
+        return 'Sorry, a village with that name already exsists'
     if mod == 0:
         if 'Eden' in list(village_list().keys()):
             return 'Eden already exsists, but we are there now',change_current_village('Eden')
@@ -2599,6 +2641,251 @@ def loop_list_siblings(list_of_names):
         except:
             continue
     return [full,half]
+
+def loop_list_halfsiblings(list_of_names):
+    out=[]
+    for name in list_of_names:
+        try:
+            isl=list(find_siblings(cvl()[name]).values())
+            for halfs in isl[0][0]:
+                out.append(halfs[0])
+        except:
+            continue
+    return out
+
+def loop_list_fullsiblings(list_of_names):
+    out=[]
+    for name in list_of_names:
+        try:
+            isl=list(find_siblings(cvl()[name]).values())
+            for fulls in isl[0][1]:
+                out.append(fulls[0])
+        except:
+            continue
+    return out
+
+def loop_list_allsiblings(list_of_names):
+    out=[]
+    for name in list_of_names:
+        try:
+            isl=list(find_siblings(cvl()[name]).values())
+            for halfs in isl[0][0]:
+                out.append(halfs[0])
+            for fulls in isl[0][1]:
+                out.append(fulls[0])
+        except:
+            continue
+    return out
+
+
+def quick_local_family_list(name1,name2):
+    """ out[0]=Parent 1=Child 2=Half Sibling
+        3=Full Sibling 4=Aunt or Uncle
+        5=Cousin 6=Niece or Nephew
+        7=GrandParent  8=GrandChild """
+    out=list('.........')
+    if name2 in loop_list_parents([name1]):
+        out[0]='P'
+    if name2 in loop_list_children([name1]):
+        out[1]='C'
+    if name2 in loop_list_halfsiblings([name1]):
+        out[2]='H'
+    if name2 in loop_list_fullsiblings([name1]):
+        out[3]='S'
+    if name2 in loop_list_allsiblings(loop_list_parents([name1])):
+        out[4]='A'
+    if name2 in loop_list_children(loop_list_allsiblings(loop_list_parents([name1]))):
+        out[5]='N'
+    if name2 in loop_list_children(loop_list_allsiblings([name1])):
+        out[6]='E'
+    if name2 in loop_list_parents(loop_list_parents([name1])):
+        out[7]='G'
+    if name2 in loop_list_children(loop_list_children([name1])):
+        out[8]='K'   
+    return ''.join(out)
+
+def quick_family_list_ALL(prename1,prename2):
+    """ out[0]=Parent 1=Child 2=Half Sibling
+        3=Full Sibling 4=Aunt or Uncle
+        5=Cousin 6=Niece or Nephew
+        7=GrandParent  8=GrandChild """
+    out=list('.........')
+    name1=cnn(prename1)
+    name2=cnn(prename2)
+    """print (name1)"""
+    if name2[0] in loop_list_parents_ALL(name1):
+        out[0]='P'
+    if name2[0] in loop_list_children_ALL(name1):
+        out[1]='C'
+    if name2[0] in loop_list_halfsiblings_ALL(name1):
+        out[2]='H'
+    if name2[0] in loop_list_fullsiblings_ALL(name1):
+        out[3]='S'
+    if name2[0] in loop_list_allsiblings_ALL(loop_list_parents_ALL(name1)):
+        out[4]='A'
+    if name2[0] in loop_list_children_ALL(loop_list_allsiblings_ALL(loop_list_parents_ALL(name1))):
+        out[5]='N'
+    if name2[0] in loop_list_children_ALL(loop_list_allsiblings_ALL(name1)):
+        out[6]='E'
+    if name2[0] in loop_list_parents_ALL(loop_list_parents_ALL(name1)):
+        out[7]='G'
+    if name2[0] in loop_list_children_ALL(loop_list_children_ALL(name1)):
+        out[8]='K'   
+    return ''.join(out)
+
+def change_name_to_namelocs(name):
+    nba(name)
+    try:
+        ca=CVA
+        return [[name,ca[name][1],ca[name][0].village_born_in]]
+    except:
+        ca=cvl_ALL()
+        return [[name,ca[name][1],ca[name][0].village_born_in]]
+
+
+def cnn(name):
+    return change_name_to_namelocs(name)
+
+def name_to_village_born_in(name):
+    nba(name)
+    ca=CVA
+    if name not in list(ca.keys()):
+        return "Far Away"
+    else:
+        return ca[name][0].village_born_in
+
+def c():
+    return cvl_ALL()
+
+
+def nto(name):
+    return name_to_village_born_in(name)
+
+def name_to_current_village(name):
+    nba(name)
+    ca=CVA
+    if name not in list(ca.keys()):
+        return "Unknown"
+    else:
+        return ca[name][1]
+
+def ntv(name):
+    return name_to_current_village(name)
+
+def remove_ancestors_that_arent_here(listofnames):
+    ca=CVA
+    here=[]
+    for name in listofnames:
+        if name in list(ca.keys()):
+            here.append(name)
+        else:
+            continue
+    return here
+
+def ra(listofnames):
+    return remove_ancestors_that_arent_here(listofnames)
+
+def loop_list_parents_ALL(list_of_namelocs):
+    """print(datetime.datetime.now().time())"""
+    list_of_all_names=[]
+    for names in list_of_namelocs:
+        list_of_all_names.append(names[0])
+    list_of_names=ra(list_of_all_names)
+    ca=CVA
+    pl=[]
+    for being in list_of_names:
+        try:
+            pl.append([display_name(ca[being][0].mom[0]),ntv(display_name(ca[being][0].mom[0])),nto(display_name(ca[being][0].mom[0]))])
+            pl.append([display_name(ca[being][0].dad[0]),ntv(display_name(ca[being][0].dad[0])),nto(display_name(ca[being][0].dad[0]))])
+        except:
+            try:
+                pl.append([display_name(ca[being][0].dad[0]),ntv(display_name(ca[being][0].dad[0])),nto(display_name(ca[being][0].dad[0]))])
+                pl.append([display_name(ca[being][0].mom[0]),ntv(display_name(ca[being][0].mom[0])),nto(display_name(ca[being][0].mom[0]))])
+            except:
+                continue
+    """print(datetime.datetime.now().time())"""
+    return remove_duplicates(pl)        
+
+
+def loop_list_children_ALL(list_of_namelocs):
+    """print(datetime.datetime.now().time())"""
+    list_of_all_names=[]
+    """print(list_of_namelocs)"""
+    for names in list_of_namelocs:
+        """print (names)"""
+        list_of_all_names.append(names[0])
+    list_of_names=ra(list_of_all_names)
+    """print(list_of_names)"""
+    """list_of_names=list_of_all_names"""
+    ca=CVA
+    cl=[]
+    for being in list_of_names:
+        """print (being)"""
+        pcl=ca[being][0].children
+        for child in pcl:
+            cl.append([display_name(child[0]),ca[display_name(child[0])][1],ca[display_name(child[0])][0].village_born_in])
+    """print(datetime.datetime.now().time())"""    
+    return remove_duplicates(cl)
+
+
+def loop_list_fullsiblings_ALL(list_of_namelocs):
+    """print(datetime.datetime.now().time())"""
+    list_of_all_names=[]
+    for names in list_of_namelocs:
+        list_of_all_names.append(names[0])
+    """list_of_names=ra(list_of_all_names)"""
+    list_of_names=list_of_all_names
+    out=[]
+    ca=CVA
+    for name in list_of_names:
+        try:
+            isl=list(find_siblings_ALL(cnn(name)).values())
+            for fulls in isl[0][1]:
+                out.append([fulls,ca[fulls][1],ca[fulls][0].village_born_in])
+        except:
+            continue
+    """print(datetime.datetime.now().time())"""
+    return remove_duplicates(out)
+
+
+def loop_list_halfsiblings_ALL(list_of_namelocs):
+    """print(datetime.datetime.now().time())"""
+    list_of_all_names=[]
+    for names in list_of_namelocs:
+        list_of_all_names.append(names[0])
+    """list_of_names=ra(list_of_all_names)"""
+    list_of_names=list_of_all_names
+    out=[]
+    ca=CVA
+    for name in list_of_names:
+        try:
+            isl=list(find_siblings_ALL(cnn(name)).values())
+            for halfs in isl[0][0]:
+                out.append([halfs[0],ca[halfs[0]][1],ca[halfs[0]][0].village_born_in])
+        except:
+            continue
+    """print(datetime.datetime.now().time())"""
+    return remove_duplicates(out)
+
+def loop_list_allsiblings_ALL(list_of_namelocs):
+    """print (list_of_namelocs)"""
+    """print(datetime.datetime.now().time())"""
+    list_of_all_names=[]
+    for names in list_of_namelocs:
+        list_of_all_names.append(names[0])
+    """list_of_names=ra(list_of_all_names)"""
+    list_of_names=list_of_all_names
+    out=[]
+    ca=CVA
+    for name in list_of_names:
+        """print (name)"""
+        isl=list(find_siblings_ALL(cnn(name)).values())
+        for halfs in isl[0][0]:
+            out.append([halfs[0],ca[halfs[0]][1],ca[halfs[0]][0].village_born_in])
+        for fulls in isl[0][1]:
+            out.append([fulls,ca[fulls][1],ca[fulls][0].village_born_in])
+    """print(datetime.datetime.now().time())"""
+    return remove_duplicates(out)
 """
     return [remove_duplicates(sl)[0],remove_duplicates(sl)[1]]
 """
@@ -2656,7 +2943,7 @@ def emmigrate_beings_test(list_of_beings,new_village):
 def emmigrate_names(list_of_names,new_village):
     cvll=cvl()
     cvl_names=list(cvl().keys())
-    ncvl=all_pick('classed_beings{}'.format(new_village))
+    ncvl=safe_pick('classed_beings{}'.format(new_village))
     list_of_beings=[]
     for name in list_of_names:
         if name in cvl_names:
@@ -2742,6 +3029,14 @@ def pop_test(popped_entry,dictionary):
     dictionary.pop(popped_entry,None)
     return dictionary
 
+def fix_village_list():
+    villist=safe_pick('village_list')
+    for vill in list(villist.keys()):
+        if safe_pick('classed_beings{}'.format(vill)) == {}:
+            del villist[vill]
+            
+    overwrite(villist,'village_list')
+    return safe_pick('village_list')
 
 def fix_group(group_name,village_name=cvs()):
     a=cvg()
@@ -3505,3 +3800,16 @@ def ddlaws_target():
             
     return effected    
 """
+def name_to_being_ALL(name):
+    out=''
+    try:
+        out[name]
+    except:
+        CVA=cvl_ALL()
+        out=CVA[name]
+    return out
+
+def nba(name):
+    return name_to_being_ALL(name)
+        
+CVA=cvl_ALL()
