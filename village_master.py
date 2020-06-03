@@ -956,6 +956,7 @@ def conceive_and_add(mom,dad):
     instance=variable_name(name)
     instance= Being(name,code,[mom.name,mom.code],[dad.name,dad.code],village_born_in)
     pickle_being(instance)
+    CVA.update({display_name(name):[instance, cvs()]})
     pickle_children(instance)
     return instance
 

@@ -1244,6 +1244,9 @@ def menu_move_group():
     print ('**************************************************************')
     print ('  Enter:                    To Go To:')
     print ('  ======     ----------------------------------')
+    c21=0
+    c22=1
+    c23=2
     for counter2, group in enumerate(other_villages_list):
         print ('  ({})      {}'.format(str(counter2).rjust(3,' '),group))
         c21=counter2+1
